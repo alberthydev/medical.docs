@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+@theme {
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 5px;
+  --radius-xl: 5px;
+  --radius-2xl: 6px;
+  --radius-3xl: 6px;
+  --radius-4xl: 6px;
+  --radius: 5px;
+}
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-bg, #fcf9f4);
+    color: #1c1c19;
+    transition: background-color 0.2s ease, font-size 0.2s ease;
+  }
+}
+
+/* User Configurable Font Families */
+.font-family-sans {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.font-family-serif {
+  font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+}
+
+.font-family-mono {
+  font-family: 'Space Grotesk', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* User Configurable Font Sizes */
+.font-size-sm {
+  font-size: 0.90rem;
+}
+
+.font-size-md {
+  font-size: 1rem;
+}
+
+.font-size-lg {
+  font-size: 1.10rem;
+}
+
+/* User Configurable Palettes */
+[data-palette="navy"] {
+  --color-primary: #0f2137;
+  --color-primary-hover: #1a3353;
+  --color-bg: #fcf9f4;
+  --color-surface: #f6f3ee;
+  --color-border: #e5e2dd;
+  --color-accent: #33694b;
+}
+
+[data-palette="emerald"] {
+  --color-primary: #0d3827;
+  --color-primary-hover: #164e37;
+  --color-bg: #f4f8f5;
+  --color-surface: #e9f2eb;
+  --color-border: #d0e4d7;
+  --color-accent: #1e7845;
+}
+
+[data-palette="slate"] {
+  --color-primary: #1e293b;
+  --color-primary-hover: #334155;
+  --color-bg: #f8fafc;
+  --color-surface: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-accent: #0284c7;
+}
+
+[data-palette="amber"] {
+  --color-primary: #38201a;
+  --color-primary-hover: #4e2e26;
+  --color-bg: #fbf8f5;
+  --color-surface: #f4ece5;
+  --color-border: #eedfd7;
+  --color-accent: #b45309;
+}
+
+.font-editorial {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+.font-sans-ui {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Custom scrollbar styling for Apple-like minimalism */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e2ddd4;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c4c6cd;
+}
+
+/* Print styles for Exportar PDF */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: #000 !important;
+  }
+  main, article, section {
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+  }
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1.5rem !important;
+  }
+  @page {
+    margin: 1.5cm;
+  }
+}
+
