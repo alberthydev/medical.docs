@@ -6,7 +6,6 @@ import {
   SharedParecerDetails 
 } from '../types';
 import { parseParecerMarkdown } from '../utils/parecerParser';
-import { PREDEFINED_USERS } from '../utils/userSettings';
 import { Avatar } from './Avatar';
 import { LOGO_URL } from '../data/mockData';
 import Markdown from 'react-markdown';
@@ -56,7 +55,6 @@ export const ParecerCompartilhadoScreen: React.FC<ParecerCompartilhadoScreenProp
 }) => {
   const [activeTab, setActiveTab] = useState<string>('all');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const [selectedUserForLogin, setSelectedUserForLogin] = useState<AppUser>(PREDEFINED_USERS[0]);
   const [isSimulatingLoggedOut, setIsSimulatingLoggedOut] = useState(false);
 
   const effectiveIsLoggedIn = isLoggedIn && !isSimulatingLoggedOut;
@@ -101,15 +99,15 @@ export const ParecerCompartilhadoScreen: React.FC<ParecerCompartilhadoScreenProp
   const drugValue = parsed.identificacao['Medicamento solicitado'] || parsed.identificacao['Medicamento'] || sharedData?.patient.requestedDrug || 'Medicamento Solicitado';
 
   // Fallback author info if not explicitly set
-  const authorName = sharedData?.author?.name || 'Dra. Helena Vance';
-  const authorRole = sharedData?.author?.role || 'Farmacêutica Auditora';
-  const authorCrf = sharedData?.author?.crf || 'CRF-SP 48.912';
+  const authorName = sharedData?.author?.name || 'Auditor autenticado';
+  const authorRole = sharedData?.author?.role || 'Auditor responsável';
+  const authorCrf = sharedData?.author?.crf || 'Não informado';
   const authorAvatarId = sharedData?.author?.avatarId || 'cat';
-  const authorEmail = sharedData?.author?.email || 'helena.vance@saude.sp.gov.br';
+  const authorEmail = sharedData?.author?.email || 'Não informado';
 
-  const generatedTimestamp = sharedData?.generatedAt || '17/09/2026 às 14:32:15';
-  const generatedFullDate = sharedData?.generatedDateFull || '17 de Setembro de 2026 às 14:32:15 (Horário Oficial de Brasília)';
-  const securityHash = sharedData?.securityHash || 'MD-SEC-88419-X7';
+  const generatedTimestamp = sharedData?.generatedAt || 'Não informado';
+  const generatedFullDate = sharedData?.generatedDateFull || 'Não informado';
+  const securityHash = sharedData?.securityHash || 'Não disponível';
 
   /* =========================================================================
      CASE 1: ACCESS BLOCKED / PROTECTED (User is not logged in)
@@ -150,7 +148,7 @@ export const ParecerCompartilhadoScreen: React.FC<ParecerCompartilhadoScreenProp
           <div className="p-4 rounded-2xl bg-[#fcf9f4] border border-[#e5e2dd] text-left space-y-2 text-xs">
             <div className="flex items-center justify-between pb-2 border-b border-[#e5e2dd]">
               <span className="text-[#74777d] font-medium">Protocolo:</span>
-              <span className="font-mono font-bold text-[#0f2137]">{sharedData?.patient.protocolNumber || 'PROC-2024-88419'}</span>
+              <span className="font-mono font-bold text-[#0f2137]">{sharedData?.patient.protocolNumber || 'Não informado'}</span>
             </div>
             <div className="flex items-center justify-between pb-2 border-b border-[#e5e2dd]">
               <span className="text-[#74777d] font-medium">Auditor Emissor:</span>
@@ -168,53 +166,17 @@ export const ParecerCompartilhadoScreen: React.FC<ParecerCompartilhadoScreenProp
             </div>
           </div>
 
-          {/* Quick Login / Credential Authorization */}
+          {/* Authentication redirect */}
           <div className="space-y-3 pt-2">
-            <label className="text-[11px] font-bold text-[#74777d] uppercase tracking-wider block text-left">
-              Identifique-se para liberar o acesso:
-            </label>
-
-            <div className="space-y-2 text-left">
-              {PREDEFINED_USERS.map((user) => {
-                const isSelected = selectedUserForLogin.id === user.id;
-                return (
-                  <button
-                    key={user.id}
-                    type="button"
-                    onClick={() => setSelectedUserForLogin(user)}
-                    className={`w-full p-2.5 rounded-xl border flex items-center gap-3 transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-[#0f2137] bg-[#fcf9f4] ring-1.5 ring-[#0f2137]/15 shadow-xs'
-                        : 'border-[#e5e2dd] hover:border-[#b8b5af] bg-white'
-                    }`}
-                  >
-                    <Avatar id={user.avatarId} size="sm" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-bold text-[#0f2137] truncate">{user.name}</div>
-                      <div className="text-[11px] text-[#74777d] truncate">{user.role}</div>
-                    </div>
-                    {isSelected && (
-                      <span className="w-5 h-5 rounded-full bg-[#0f2137] text-white flex items-center justify-center text-xs">
-                        ✓
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Authentication Submit Button */}
             <button
               type="button"
               onClick={() => {
-                onLogin(selectedUserForLogin);
-                setIsSimulatingLoggedOut(false);
-                onCopyNotice(`Autenticado com sucesso como ${selectedUserForLogin.name}. Parecer liberado!`);
+                onNavigate('login');
               }}
               className="w-full h-12 rounded-xl bg-[#0f2137] hover:bg-[#1a3353] active:scale-[0.99] text-white font-semibold text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
             >
               <Unlock className="w-4 h-4 text-[#b5f0ca]" />
-              <span>Autenticar e Visualizar Parecer Completo</span>
+              <span>Entrar para visualizar o parecer completo</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

@@ -1,14 +1,134 @@
 import express from "express";
 import path from "path";
+import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { FULL_SYSTEM_PROMPT } from "./src/data/fullSystemPrompt";
-import { SAMPLE_MARKDOWN_ANALYSIS } from "./src/data/sampleAnalysisMarkdown";
 
 dotenv.config();
 
 let openAiClient: OpenAI | null = null;
+const sessions = new Map<string, { user: AdminUser; expiresAt: number }>();
+
+interface AdminUser {
+  id: string;
+  name: string;
+  role: string;
+  email: string;
+  avatarId: string;
+}
+
+interface ScrapedPcdt {
+  pcdtId: string;
+  pcdtName: string;
+  portaria: string;
+  anoVigencia: string;
+  cidsCobertos: string[];
+  principaisMedicamentos: string[];
+  criteriosResumo: string;
+  sourceUrl: string;
+  scrapedAt: string;
+  fileSize: string;
+  summaryFile?: { name: string; data: string };
+}
+
+const PCDT_CATALOG_URL = process.env.PCDT_CATALOG_URL ||
+  "https://www.saude.sc.gov.br/index.php/pt/assistencia-farmaceutica-diaf/componente-especializado-da-assistencia-farmaceutica-ceaf/protocolos-clinicos-ter-resumos-e-formularios";
+
+function decodeHtml(value: string): string {
+  return value
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'");
+}
+
+function cleanHtmlText(value: string): string {
+  return decodeHtml(value.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+}
+
+function absoluteUrl(href: string, baseUrl: string): string {
+  return new URL(decodeHtml(href), baseUrl).toString();
+}
+
+async function scrapePcdtSummary(cid: string, pathology: string): Promise<ScrapedPcdt | null> {
+  const catalogResponse = await fetch(PCDT_CATALOG_URL);
+  if (!catalogResponse.ok) throw new Error(`Catálogo PCDT indisponível (${catalogResponse.status}).`);
+  const catalogHtml = await catalogResponse.text();
+  const normalizedPathology = pathology.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const catalogLinks = [...catalogHtml.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)]
+    .map(match => ({ href: match[1], text: cleanHtmlText(match[2]) }))
+    .filter(link => {
+      const normalizedText = link.text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return normalizedPathology.length > 2 &&
+        normalizedText.length > 2 &&
+        (normalizedText.includes(normalizedPathology) || normalizedPathology.includes(normalizedText));
+    });
+  const detailLink = catalogLinks[0];
+  if (!detailLink) return null;
+
+  const detailUrl = absoluteUrl(detailLink.href, PCDT_CATALOG_URL);
+  const detailResponse = await fetch(detailUrl);
+  if (!detailResponse.ok) throw new Error(`Página do PCDT indisponível (${detailResponse.status}).`);
+  const detailHtml = await detailResponse.text();
+  const documentLinks = [...detailHtml.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)]
+    .map(match => ({ href: match[1], text: cleanHtmlText(match[2]) }))
+    .filter(link => /resumo/i.test(link.text) || /resumo/i.test(link.href));
+  const summaryLink = documentLinks.find(link =>
+    /resumo/i.test(link.text) && /download/i.test(link.href)
+  ) || documentLinks.find(link =>
+    /(?:^|[/_-])resumo(?:[/_-]|$)/i.test(link.href) && /download/i.test(link.href)
+  );
+  if (!summaryLink) return null;
+
+  const summaryUrl = absoluteUrl(summaryLink.href, detailUrl);
+  const summaryResponse = await fetch(summaryUrl);
+  if (!summaryResponse.ok) throw new Error(`PDF do resumo indisponível (${summaryResponse.status}).`);
+  const bytes = Buffer.from(await summaryResponse.arrayBuffer());
+  const fileName = decodeHtml(summaryLink.text).replace(/[^\wÀ-ÿ.-]+/g, "_").replace(/^_+|_+$/g, "") || `Resumo_${pathology}.pdf`;
+  const normalizedName = fileName.toLowerCase().endsWith(".pdf") ? fileName : `${fileName}.pdf`;
+  return {
+    pcdtId: `sc-${Buffer.from(detailUrl).toString("base64url").slice(0, 24)}`,
+    pcdtName: detailLink.text || pathology,
+    portaria: "Documento localizado no portal DIAF/SC",
+    anoVigencia: "Conforme publicação oficial",
+    cidsCobertos: cid ? [cid] : [],
+    principaisMedicamentos: [],
+    criteriosResumo: `Resumo oficial baixado automaticamente do portal DIAF/SC: ${summaryLink.text}. O PDF original foi anexado à análise.`,
+    sourceUrl: detailUrl,
+    scrapedAt: new Date().toISOString(),
+    fileSize: `${(bytes.length / 1024).toFixed(0)} KB`,
+    summaryFile: { name: normalizedName, data: `data:application/pdf;base64,${bytes.toString("base64")}` }
+  };
+}
+
+const adminUser: AdminUser = {
+  id: "admin",
+  name: process.env.ADMIN_NAME || "Administrador",
+  role: "Administrador geral",
+  email: process.env.ADMIN_EMAIL || "admin@medicaldocs.local",
+  avatarId: "cat"
+};
+
+function createSession(res: express.Response, user: AdminUser) {
+  const token = crypto.randomBytes(32).toString("hex");
+  sessions.set(token, { user, expiresAt: Date.now() + 8 * 60 * 60 * 1000 });
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  res.setHeader("Set-Cookie", `medicaldocs_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800${secure}`);
+}
+
+function getSessionUser(req: express.Request): AdminUser | null {
+  const token = req.headers.cookie?.match(/(?:^|;\s*)medicaldocs_session=([^;]+)/)?.[1];
+  const session = token ? sessions.get(token) : undefined;
+  if (!session || session.expiresAt < Date.now()) {
+    if (token) sessions.delete(token);
+    return null;
+  }
+  return session.user;
+}
 
 function getOpenAIClient(): OpenAI | null {
   const key = process.env.OPENAI_API_KEY;
@@ -28,6 +148,93 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
+  app.get("/api/auth/me", (req, res) => {
+    const user = getSessionUser(req);
+    return user ? res.json({ authenticated: true, user }) : res.status(401).json({ authenticated: false });
+  });
+
+  app.post("/api/auth/login", (req, res) => {
+    const username = typeof req.body?.username === "string" ? req.body.username.trim() : "";
+    const password = typeof req.body?.password === "string" ? req.body.password : "";
+    const expectedUsername = process.env.ADMIN_USERNAME || "admin";
+    const expectedPassword = process.env.ADMIN_PASSWORD || "teste123";
+    if (username !== expectedUsername || password !== expectedPassword) {
+      return res.status(401).json({ error: "Usuário ou senha inválidos." });
+    }
+    createSession(res, adminUser);
+    return res.json({ user: adminUser });
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    const token = req.headers.cookie?.match(/(?:^|;\s*)medicaldocs_session=([^;]+)/)?.[1];
+    if (token) sessions.delete(token);
+    res.setHeader("Set-Cookie", "medicaldocs_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0");
+    return res.json({ success: true });
+  });
+
+  app.get("/api/auth/govbr", (req, res) => {
+    const clientId = process.env.GOVBR_CLIENT_ID;
+    const redirectUri = process.env.GOVBR_REDIRECT_URI;
+    if (!clientId || !redirectUri) {
+      return res.status(503).json({ error: "Integração gov.br ainda não configurada no servidor." });
+    }
+    const state = crypto.randomBytes(24).toString("hex");
+    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    res.setHeader("Set-Cookie", `govbr_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600${secure}`);
+    const params = new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      scope: process.env.GOVBR_SCOPE || "openid email profile",
+      state
+    });
+    return res.redirect(`https://sso.acesso.gov.br/authorize?${params}`);
+  });
+
+  app.get("/api/auth/govbr/callback", async (req, res) => {
+    const stateCookie = req.headers.cookie?.match(/(?:^|;\s*)govbr_oauth_state=([^;]+)/)?.[1];
+    if (!req.query.code || !stateCookie || stateCookie !== req.query.state) {
+      return res.status(400).send("Falha de validação do login gov.br.");
+    }
+    const clientId = process.env.GOVBR_CLIENT_ID;
+    const clientSecret = process.env.GOVBR_CLIENT_SECRET;
+    const redirectUri = process.env.GOVBR_REDIRECT_URI;
+    if (!clientId || !clientSecret || !redirectUri) {
+      return res.status(503).send("Integração gov.br não configurada.");
+    }
+    try {
+      const tokenResponse = await fetch("https://sso.acesso.gov.br/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          code: String(req.query.code),
+          client_id: clientId,
+          client_secret: clientSecret,
+          redirect_uri: redirectUri
+        })
+      });
+      if (!tokenResponse.ok) throw new Error("Não foi possível obter o token gov.br.");
+      const token = await tokenResponse.json() as { access_token?: string };
+      if (!token.access_token) throw new Error("Resposta inválida do gov.br.");
+      const profileResponse = await fetch("https://sso.acesso.gov.br/userinfo", {
+        headers: { Authorization: `Bearer ${token.access_token}` }
+      });
+      if (!profileResponse.ok) throw new Error("Não foi possível obter o perfil gov.br.");
+      const profile = await profileResponse.json() as { sub?: string; name?: string; email?: string };
+      createSession(res, {
+        ...adminUser,
+        id: `govbr:${profile.sub || "user"}`,
+        name: profile.name || adminUser.name,
+        email: profile.email || adminUser.email
+      });
+      return res.redirect("/");
+    } catch (error) {
+      console.error("Erro no callback gov.br:", error);
+      return res.status(502).send("Não foi possível concluir o login gov.br.");
+    }
+  });
+
   // Health check API
   app.get("/api/health", (req, res) => {
     const hasKey = Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().length > 0);
@@ -40,19 +247,14 @@ async function startServer() {
   // PCDT Scraper API route - searches and scrapes official PCDT by CID and pathology
   app.post("/api/pcdt/scrape", async (req, res) => {
     try {
+      if (!getSessionUser(req)) {
+        return res.status(401).json({ error: "Sessão expirada. Faça login novamente." });
+      }
       const { cid, pathology, filename } = req.body;
       const normalizedCid = (cid || '').toUpperCase().trim();
-      
-      // Simulate real-time scraping latency for realistic workflow feedback
-      await new Promise(r => setTimeout(r, 600));
-
-      return res.json({
-        success: true,
-        scrapedFrom: "https://www.gov.br/conitec/pt-br/assuntos/avaliacao-de-tecnologias-em-saude/pcdt",
-        cid: normalizedCid,
-        pathology: pathology || "Patologia Identificada",
-        timestamp: new Date().toISOString()
-      });
+      const result = await scrapePcdtSummary(normalizedCid, String(pathology || ""));
+      if (!result) return res.status(404).json({ error: "Resumo oficial não encontrado para a patologia informada." });
+      return res.json({ success: true, ...result, filename });
     } catch (err: any) {
       return res.status(500).json({ error: err.message });
     }
@@ -61,11 +263,15 @@ async function startServer() {
   // Analyze API route - receives PCDT and Patient files/texts and calls OpenAI ChatGPT API
   app.post("/api/analyze", async (req, res) => {
     try {
+      if (!getSessionUser(req)) {
+        return res.status(401).json({ error: "Sessão expirada. Faça login novamente." });
+      }
       const { 
         pcdtText, 
         patientDossierText, 
         pcdtFileName, 
         patientFileNames,
+        files,
         customPromptAddition,
         systemPrompt
       } = req.body;
@@ -84,30 +290,49 @@ Conteúdo dos documentos do paciente (LME, Receita Médica, Exames, Relatórios,
 ${patientDossierText || 'Documentos digitalizados do processo do paciente para conferência minuciosa.'}
 ${customPromptAddition ? `\nInstruções adicionais: ${customPromptAddition}` : ''}`;
 
-        const completion = await client.chat.completions.create({
+        const uploadedFiles = Array.isArray(files) ? files : [];
+        const fileInputs = uploadedFiles
+          .filter((file) =>
+            file &&
+            typeof file.name === "string" &&
+            typeof file.data === "string" &&
+            file.data.startsWith("data:")
+          )
+          .map((file) => ({
+            type: "input_file" as const,
+            filename: file.name,
+            file_data: file.data,
+          }));
+
+        const response = await client.responses.create({
           model: "gpt-4o",
-          messages: [
-            { role: "system", content: systemPrompt && systemPrompt.trim().length > 0 ? systemPrompt : FULL_SYSTEM_PROMPT },
-            { role: "user", content: userPrompt }
+          instructions: `${systemPrompt && systemPrompt.trim().length > 0 ? systemPrompt : FULL_SYSTEM_PROMPT}
+
+Responda exclusivamente em Markdown válido, sem cercar a resposta com blocos de código. Preserve os títulos, tabelas e listas exigidos pelo prompt.`,
+          input: [
+            {
+              role: "user",
+              content: [
+                { type: "input_text", text: userPrompt },
+                ...fileInputs
+              ]
+            }
           ],
-          temperature: 0.1
+          temperature: 0.1,
         });
 
-        const markdownResult = completion.choices[0]?.message?.content || "";
+        const markdownResult = response.output_text || "";
 
         return res.json({
           markdown: markdownResult,
           model: "gpt-4o",
-          source: "openai-api"
+          source: "openai-api",
+          filesSent: fileInputs.length
         });
       }
 
-      // If OPENAI_API_KEY is not configured, simulate real execution gracefully with exact 7-section markdown
-      return res.json({
-        markdown: SAMPLE_MARKDOWN_ANALYSIS,
-        model: "gpt-4o (demonstração)",
-        source: "demo",
-        notice: "Demonstração ativa. Adicione OPENAI_API_KEY nas variáveis de ambiente para consultas em tempo real na OpenAI."
+      return res.status(503).json({
+        error: "OPENAI_API_KEY não configurada. Configure a chave no arquivo .env para executar a análise."
       });
 
     } catch (error: any) {

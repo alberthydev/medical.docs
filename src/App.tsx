@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScreenId, PatientAnalysis, AppUser, UserSettings, SharedParecerDetails } from './types';
-import { DEFAULT_PATIENT_ANALYSIS, getMarkdownForPatient } from './data/mockData';
+import { getMarkdownForPatient } from './data/mockData';
 import { 
   getCurrentUser, 
   setCurrentUser as persistCurrentUser, 
@@ -26,13 +26,13 @@ import { AvatarId } from './components/Avatar';
 const STORAGE_HISTORY_KEY = 'medauditor_patients_history_v1';
 
 export function App() {
-  const [currentScreen, setCurrentScreen] = useState<ScreenId>('nova-analise');
+  const [currentScreen, setCurrentScreen] = useState<ScreenId>('login');
   const [currentUser, setCurrentUser] = useState<AppUser>(() => getCurrentUser());
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userSettings, setUserSettings] = useState<UserSettings>(() => getUserSettings(getCurrentUser().id));
   const [isPromptEditorOpen, setIsPromptEditorOpen] = useState(false);
 
-  const [activePatient, setActivePatient] = useState<PatientAnalysis>(DEFAULT_PATIENT_ANALYSIS);
+  const [activePatient, setActivePatient] = useState<PatientAnalysis | null>(null);
   const [currentMarkdown, setCurrentMarkdown] = useState<string>('');
   const [allPatients, setAllPatients] = useState<PatientAnalysis[]>(() => {
     try {
@@ -50,6 +50,19 @@ export function App() {
   const [sharedParecerData, setSharedParecerData] = useState<SharedParecerDetails | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [avatarId, setAvatarId] = useState<AvatarId>(() => (getCurrentUser().avatarId as AvatarId) || 'cat');
+
+  useEffect(() => {
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(async response => response.ok ? response.json() : null)
+      .then(data => {
+        if (data?.user) {
+          handleSwitchUser(data.user);
+          setIsLoggedIn(true);
+          setCurrentScreen('nova-analise');
+        }
+      })
+      .catch(() => undefined);
+  }, []);
 
   // Auto-collapse sidebar on tablet resolutions (768px - 1024px)
   useEffect(() => {
@@ -74,7 +87,7 @@ export function App() {
         const protocol = decodeURIComponent(hash.replace('#parecer=', '')).toUpperCase();
         const found = allPatients.find(p => p.protocolNumber.toUpperCase() === protocol || p.id === protocol);
         if (found) {
-          const targetMarkdown = getMarkdownForPatient(found);
+          const targetMarkdown = found.markdown || getMarkdownForPatient(found);
           handleOpenSharedView(found, targetMarkdown);
         }
       }
@@ -96,7 +109,6 @@ export function App() {
   const handleSwitchUser = (newUser: AppUser) => {
     persistCurrentUser(newUser);
     setCurrentUser(newUser);
-    setIsLoggedIn(true);
     const loadedSettings = getUserSettings(newUser.id);
     setUserSettings(loadedSettings);
     setAvatarId(newUser.avatarId as AvatarId);
@@ -120,7 +132,7 @@ export function App() {
 
   const handleSelectPatientFromHistory = (patient: PatientAnalysis) => {
     setActivePatient(patient);
-    setCurrentMarkdown(getMarkdownForPatient(patient));
+    setCurrentMarkdown(patient.markdown || getMarkdownForPatient(patient));
     setCurrentScreen('parecer');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -156,7 +168,7 @@ export function App() {
       year: 'numeric' 
     });
 
-    const markdownToUse = customMarkdown || (activePatient.id === patient.id && currentMarkdown.trim() ? currentMarkdown : getMarkdownForPatient(patient));
+    const markdownToUse = customMarkdown || (activePatient?.id === patient.id && currentMarkdown.trim() ? currentMarkdown : patient.markdown || getMarkdownForPatient(patient));
 
     const details: SharedParecerDetails = {
       id: `shared-${patient.protocolNumber || 'REG'}`,
@@ -189,10 +201,10 @@ export function App() {
         data-palette={userSettings.colorPalette}
         className={`w-full min-h-screen font-family-${userSettings.fontFamily} font-size-${userSettings.fontSize}`}
       >
-        <LoginScreen 
-          currentUser={currentUser}
-          onSelectUser={handleSwitchUser}
-          onLoginSuccess={() => {
+        <LoginScreen
+        onShowNotice={showToast}
+        onLoginSuccess={(user) => {
+          handleSwitchUser(user);
             setIsLoggedIn(true);
             setCurrentScreen('nova-analise');
           }} 
@@ -218,6 +230,7 @@ export function App() {
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         onLogout={() => {
+          fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => undefined);
           setIsLoggedIn(false);
           setCurrentScreen('login');
         }}
@@ -236,6 +249,7 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onLogout={() => {
+            fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => undefined);
             setIsLoggedIn(false);
             setCurrentScreen('login');
           }}
@@ -259,7 +273,7 @@ export function App() {
               markdownContent={currentMarkdown}
               onUpdateMarkdown={setCurrentMarkdown}
               onCopyNotice={showToast}
-              onOpenShareModal={() => setShareModalPatient(activePatient)}
+              onOpenShareModal={() => activePatient && setShareModalPatient(activePatient)}
               onNavigateToNovaAnalise={() => {
                 setCurrentScreen('nova-analise');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -267,7 +281,7 @@ export function App() {
             />
           )}
 
-          {currentScreen === 'parecer-compartilhado' && (
+          {currentScreen === 'parecer-compartilhado' && activePatient && (
             <ParecerCompartilhadoScreen 
               sharedData={sharedParecerData || {
                 id: `shared-${activePatient.protocolNumber || 'PROCESSO'}`,

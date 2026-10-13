@@ -24,7 +24,6 @@ import {
 import { PatientAnalysis } from '../types';
 import { 
   parseStandardFileName, 
-  scrapeAndFetchPcdt, 
   PcdtScrapedResult, 
   ParsedFileInfo,
   OFFICIAL_PCDT_REGISTRY 
@@ -41,8 +40,19 @@ interface UploadedFile {
   id: string;
   name: string;
   size: string;
+  file: File;
   text?: string;
   parsedInfo?: ParsedFileInfo;
+}
+
+interface ScrapedSummaryFile {
+  name: string;
+  data: string;
+}
+
+interface ApiFile {
+  name: string;
+  data: string;
 }
 
 export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
@@ -84,6 +94,19 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   const patientFileInputRef = useRef<HTMLInputElement>(null);
   const manualPcdtInputRef = useRef<HTMLInputElement>(null);
 
+  const fileToDataUrl = (file: File): Promise<string> => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result);
+      } else {
+        reject(new Error(`Não foi possível ler o arquivo "${file.name}".`));
+      }
+    };
+    reader.onerror = () => reject(reader.error || new Error(`Não foi possível ler o arquivo "${file.name}".`));
+    reader.readAsDataURL(file);
+  });
+
   // Trigger automated web scraping when metadata CID/Pathology changes
   const performPcdtAutoScraping = async (cid: string, pathology: string, filename: string) => {
     setIsScrapingPcdt(true);
@@ -102,13 +125,15 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
 
     try {
       // Call backend scraper endpoint for logging and realism
-      await fetch('/api/pcdt/scrape', {
+      const scrapeResponse = await fetch('/api/pcdt/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cid, pathology, filename })
-      }).catch(() => null);
-
-      const result = await scrapeAndFetchPcdt(cid, pathology);
+      });
+      const scrapedResult = scrapeResponse.ok
+        ? await scrapeResponse.json() as PcdtScrapedResult & { summaryFile?: ScrapedSummaryFile }
+        : null;
+      const result = scrapedResult;
       
       setTimeout(() => {
         setScrapedPcdt(result);
@@ -121,10 +146,10 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       }, 1400);
 
     } catch (err) {
-      console.warn('Scraping fallback:', err);
-      const fallback = await scrapeAndFetchPcdt(cid, pathology);
-      setScrapedPcdt(fallback);
+      console.error('Erro ao baixar o resumo oficial do PCDT:', err);
+      setScrapedPcdt(null);
       setIsScrapingPcdt(false);
+      onShowNotice('Não foi possível baixar o resumo oficial. O envio manual do PCDT foi habilitado.');
     }
   };
 
@@ -132,7 +157,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   const processUploadedFiles = (fileList: File[]) => {
     if (!fileList || fileList.length === 0) return;
 
-    // Check if at least one file follows the required CID-Patologia-Nome pattern
+    // Check if at least one file follows the required CID10-Patologia-Nome pattern
     const validFile = fileList.find(f => {
       const parsed = parseStandardFileName(f.name);
       return parsed.hasStandardPattern;
@@ -141,11 +166,17 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     if (!validFile) {
       // Non-standard filename: Reject the file completely and set error notice
       const rejectedFileName = fileList[0].name;
+      const usesCidLabel = /^cid[-_]/i.test(rejectedFileName.replace(/\.[^/.]+$/, '').trim());
+      const expectedPattern = usesCidLabel
+        ? 'J45-Asma-Nome_do_Paciente.pdf (use o código CID-10 real; "CID" não é um código)'
+        : 'CID10-Patologia-Nome_do_Paciente.pdf';
       setUploadError({
         filename: rejectedFileName,
-        message: `O arquivo "${rejectedFileName}" não segue o padrão exigido (CID-Patologia-Nome). O sistema recusou o documento.`
+        message: usesCidLabel
+          ? `O arquivo "${rejectedFileName}" usa "CID" como rótulo. Informe o código CID-10 real no primeiro segmento, por exemplo "J45-Asma-Nome_do_Paciente.pdf".`
+          : `O arquivo "${rejectedFileName}" não segue o padrão exigido (CID10-Patologia-Nome). O sistema recusou o documento.`
       });
-      onShowNotice(`Aviso: Arquivo fora do padrão. Nome esperado: CID-Patologia-Nome.pdf`);
+      onShowNotice(`Aviso: arquivo fora do padrão. Exemplo aceito: ${expectedPattern}`);
       return;
     }
 
@@ -158,6 +189,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       id: `patient-file-${Date.now()}-${idx}`,
       name: f.name,
       size: `${(f.size / 1024).toFixed(0)} KB`,
+      file: f,
       parsedInfo: parseStandardFileName(f.name)
     }));
 
@@ -189,7 +221,8 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       const manualUploaded: UploadedFile = {
         id: `manual-pcdt-${Date.now()}`,
         name: file.name,
-        size: `${(file.size / 1024).toFixed(0)} KB`
+        size: `${(file.size / 1024).toFixed(0)} KB`,
+        file
       };
       setManualPcdtFile(manualUploaded);
 
@@ -237,6 +270,21 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     }, 1800);
 
     try {
+      const filesToSend = [
+        ...patientFiles,
+        ...(manualPcdtFile ? [manualPcdtFile] : [])
+      ];
+      const apiFiles: ApiFile[] = await Promise.all(
+        filesToSend.map(async ({ name, file }) => ({
+          name,
+          data: await fileToDataUrl(file)
+        }))
+      );
+      const scrapedSummaryFile = scrapedPcdt && 'summaryFile' in scrapedPcdt
+        ? (scrapedPcdt as PcdtScrapedResult & { summaryFile?: ScrapedSummaryFile }).summaryFile
+        : undefined;
+      if (scrapedSummaryFile) apiFiles.push(scrapedSummaryFile);
+
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -245,6 +293,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
           pcdtFileName: pcdtFileNameToUse,
           patientDossierText: patientDossierNotes,
           patientFileNames: patientFiles.map(f => f.name),
+          files: apiFiles,
           systemPrompt: activePrompt
         })
       });
@@ -317,7 +366,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
         </h1>
 
         <p className="text-xs sm:text-sm text-[#74777d] leading-relaxed">
-          Faça o upload dos documentos do paciente. O sistema reconhece o padrão <code className="bg-[#f6f3ee] text-[#0f2137] px-1.5 py-0.5 rounded font-mono font-semibold text-[11px] border border-[#e5e2dd]">CID-Patologia-Nome</code>, realiza o <strong>web scraping do PCDT oficial</strong> no portal CONITEC/Ministério da Saúde e gera o parecer técnico.
+          Faça o upload dos documentos do paciente. O sistema reconhece o padrão <code className="bg-[#f6f3ee] text-[#0f2137] px-1.5 py-0.5 rounded font-mono font-semibold text-[11px] border border-[#e5e2dd]">CID10-Patologia-Nome</code>, realiza o <strong>web scraping do PCDT oficial</strong> no portal CONITEC/Ministério da Saúde e gera o parecer técnico.
         </p>
 
         {/* Active Prompt Info */}
@@ -358,7 +407,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
 
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-mono bg-[#f6f3ee] text-[#0f2137] border border-[#e5e2dd] px-2.5 py-0.5 rounded-lg font-medium">
-                Padrão: CID-Patologia-Nome
+                Padrão: CID10-Patologia-Nome
               </span>
               <span className="text-[11px] text-[#74777d] font-medium hidden sm:inline">
                 ({patientFiles.length} anexos)
@@ -391,7 +440,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
                     O arquivo <code className="font-mono text-[#8d2a13] bg-white px-1.5 py-0.5 rounded border border-[#f5cfbd] font-bold">{uploadError.filename}</code> não foi aceito pelo sistema porque não segue a nomenclatura padronizada necessária para a extração automática.
                   </p>
                   <p className="text-xs font-semibold text-[#0f2137]">
-                    Estrutura obrigatória: <code className="bg-white px-2 py-0.5 rounded border border-[#e5e2dd] font-mono text-[11px] text-[#0f2137]">CID-Patologia-Nome_do_Paciente.pdf</code>
+                    Estrutura obrigatória: <code className="bg-white px-2 py-0.5 rounded border border-[#e5e2dd] font-mono text-[11px] text-[#0f2137]">CID10-Patologia-Nome_do_Paciente.pdf</code>
                   </p>
                 </div>
               </div>
@@ -430,7 +479,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
                 Clique para selecionar ou arraste os documentos do processo
               </p>
               <p className="text-xs text-[#74777d]">
-                Arquivo principal obrigatório: <span className="font-mono font-medium text-[#0f2137] bg-white px-2 py-0.5 rounded border border-[#e5e2dd]">CID-Patologia-Nome_do_Paciente.pdf</span>
+                Arquivo principal obrigatório: <span className="font-mono font-medium text-[#0f2137] bg-white px-2 py-0.5 rounded border border-[#e5e2dd]">CID10-Patologia-Nome_do_Paciente.pdf</span>
               </p>
             </div>
           )}

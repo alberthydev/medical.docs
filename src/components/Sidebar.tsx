@@ -217,7 +217,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div 
             onClick={() => onNavigate('perfil')}
             className="flex items-center gap-2.5 min-w-0 cursor-pointer group"
-            title={isCollapsed ? `Meu Perfil (${currentUser?.name || 'Dra. Helena Vance'})` : "Ver meu perfil e trocar avatar"}
+            title={isCollapsed ? `Meu Perfil (${currentUser?.name || 'Usuário'})` : "Ver meu perfil e trocar avatar"}
           >
             <div className="relative shrink-0 transition-transform group-hover:scale-105">
               <Avatar id={avatarId} size="sm" />
@@ -227,7 +227,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-semibold text-[#0f2137] truncate leading-tight group-hover:text-[#1a3353]">
-                  {currentUser?.name || 'Dra. Helena Vance'}
+                  {currentUser?.name || 'Usuário'}
                 </span>
                 <span className="text-[10px] text-[#74777d] truncate">
                   {currentUser?.role || 'Farmacêutica Auditora'}

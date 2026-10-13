@@ -1,32 +1,15 @@
 import { AppUser, UserSettings, PromptVersionItem } from '../types';
 import { FULL_SYSTEM_PROMPT } from '../data/fullSystemPrompt';
 
-export const PREDEFINED_USERS: AppUser[] = [
-  {
-    id: 'helena',
-    name: 'Dra. Helena Vance',
-    role: 'Farmacêutica Auditora',
-    avatarId: 'cat',
-    email: 'helena.vance@saude.sp.gov.br',
-    crf: 'CRF-SP 48.912'
-  },
-  {
-    id: 'carlos',
-    name: 'Dr. Carlos Mendes',
-    role: 'Médico Regulador / Auditor',
-    avatarId: 'lion',
-    email: 'carlos.mendes@saude.sp.gov.br',
-    crf: 'CRM-SP 98.441'
-  },
-  {
-    id: 'patricia',
-    name: 'Dra. Patrícia Lima',
-    role: 'Especialista em Gestão CEAF',
-    avatarId: 'fox',
-    email: 'patricia.lima@saude.sp.gov.br',
-    crf: 'CRF-SP 52.310'
-  }
-];
+export const ADMIN_USER: AppUser = {
+  id: 'admin',
+  name: 'Administrador',
+  role: 'Administrador geral',
+  avatarId: 'cat',
+  email: 'admin@medicaldocs.local'
+};
+
+export const PREDEFINED_USERS: AppUser[] = [ADMIN_USER];
 
 const CURRENT_USER_KEY = 'medicaldocs_current_user_id';
 const SETTINGS_PREFIX = 'medicaldocs_user_settings_';
@@ -37,7 +20,7 @@ function createDefaultHistory(userName: string): PromptVersionItem[] {
     {
       id: 'v-1-default',
       version: 1,
-      timestamp: '17/09/2026 às 08:30',
+      timestamp: new Date().toLocaleString('pt-BR'),
       isoDate: new Date().toISOString(),
       content: FULL_SYSTEM_PROMPT,
       charCount: FULL_SYSTEM_PROMPT.length,
@@ -48,26 +31,6 @@ function createDefaultHistory(userName: string): PromptVersionItem[] {
 }
 
 export function getDefaultSettingsForUser(user: AppUser): UserSettings {
-  // Give distinctive initial presets so user instantly sees each profile's uniqueness
-  if (user.id === 'carlos') {
-    return {
-      fontFamily: 'serif',
-      fontSize: 'lg',
-      colorPalette: 'slate',
-      activePrompt: FULL_SYSTEM_PROMPT,
-      promptHistory: createDefaultHistory(user.name)
-    };
-  } else if (user.id === 'patricia') {
-    return {
-      fontFamily: 'mono',
-      fontSize: 'sm',
-      colorPalette: 'emerald',
-      activePrompt: FULL_SYSTEM_PROMPT,
-      promptHistory: createDefaultHistory(user.name)
-    };
-  }
-
-  // Default for Helena
   return {
     fontFamily: 'sans',
     fontSize: 'md',
@@ -92,7 +55,7 @@ export function getCurrentUser(): AppUser {
   } catch (e) {
     console.warn('Erro ao carregar usuário atual:', e);
   }
-  return PREDEFINED_USERS[0]; // Helena by default
+  return ADMIN_USER;
 }
 
 export function setCurrentUser(user: AppUser): void {

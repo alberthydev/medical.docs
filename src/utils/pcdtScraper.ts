@@ -149,13 +149,15 @@ export const OFFICIAL_PCDT_REGISTRY: Record<string, PcdtScrapedResult> = {
 };
 
 /**
- * Parses a standard file name in the format "CID-Patologia-Nome"
+ * Parses a standard file name in the format "CID10-Patologia-Nome".
+ * The first segment must be the actual CID-10 code, not the literal word "CID".
  * Accepts variations with dashes, underscores, spaces, or dots.
  * Examples:
  *  - "M05.8-Artrite_Reumatoide-Maria_Aparecida.pdf"
  *  - "M05_8-Artrite-Reumatoide-Marcos_Vinicius.pdf"
  *  - "E83.0-Doenca_de_Wilson-Carlos_Eduardo.pdf"
  *  - "G35-Esclerose_Multipla-Ana_Paula.pdf"
+ *  - "J45-Asma-Paciente.pdf"
  */
 export function parseStandardFileName(filename: string): ParsedFileInfo {
   // Strip extension
