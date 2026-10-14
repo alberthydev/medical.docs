@@ -6,7 +6,8 @@ export const ADMIN_USER: AppUser = {
   name: 'Administrador',
   role: 'Administrador geral',
   avatarId: 'cat',
-  email: 'admin@medicaldocs.local'
+  email: 'admin@medicaldocs.local',
+  crf: undefined
 };
 
 export const PREDEFINED_USERS: AppUser[] = [ADMIN_USER];

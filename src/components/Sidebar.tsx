@@ -8,7 +8,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { ScreenId, AppUser } from '../types';
-import { LOGO_URL } from '../data/mockData';
+import { LOGO_URL } from '../data/branding';
 import { Avatar } from './Avatar';
 
 interface SidebarProps {

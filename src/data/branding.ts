@@ -1,7 +1,1 @@
-import { PatientAnalysis } from '../types';
-
 export const LOGO_URL = 'https://lh3.googleusercontent.com/aida/AEtjO1WZM3-Mp5RAZ-i9D5XkV7D3v2G2E2gyEx7VAfxTB-agVsuMKDLfr0ZkHFbEcu5mG8w55JROUPA8Z0MreLQoVsi9Km6XLZrtDH-aXTOdo7YDZClb27GEq1Nec10IZFx_zAVktLOoZZeiWZPummUycHqfMZQFP8Yo9ZQm1oagXARafwJnfV4lD681Eb0ZLRoOP-WZYOkeWPAhUvbVO3zY1KHMtYsZdnY7dWigUd3h2o7o-sceBOMsUcnRHoGq';
-
-export function getMarkdownForPatient(patient: PatientAnalysis): string {
-  return patient?.markdown || '';
-}

@@ -73,6 +73,7 @@ export interface PatientAnalysis {
   officialDispatchText: string;
   auditorName: string;
   auditorCrf?: string;
+  securityHash?: string;
   generatedDateFull?: string;
   markdown?: string;
 }

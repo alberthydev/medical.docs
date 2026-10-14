@@ -71,9 +71,9 @@ export const MarkdownParecerView: React.FC<MarkdownParecerViewProps> = ({
     ? XCircle 
     : AlertTriangle;
 
-  const patientName = parsed.identificacao['Paciente'] || 'Paciente Identificado';
+  const patientName = parsed.identificacao['Paciente'] || 'Não informado';
   const cidValue = parsed.identificacao['CID-10'] || parsed.identificacao['CID'] || 'CID-10';
-  const drugValue = parsed.identificacao['Medicamento solicitado'] || parsed.identificacao['Medicamento'] || 'Medicamento Solicitado';
+  const drugValue = parsed.identificacao['Medicamento solicitado'] || parsed.identificacao['Medicamento'] || 'Não informado';
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 animate-in fade-in duration-300">

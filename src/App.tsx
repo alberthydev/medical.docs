@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScreenId, PatientAnalysis, AppUser, UserSettings, SharedParecerDetails } from './types';
-import { getMarkdownForPatient } from './data/mockData';
+import { getMarkdownForPatient } from './utils/patientAnalysis';
 import { 
   getCurrentUser, 
   setCurrentUser as persistCurrentUser, 
@@ -101,9 +101,11 @@ export function App() {
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 2800);
+    if (!msg.includes('Sem tokens disponíveis')) {
+      setTimeout(() => {
+        setToastMessage(null);
+      }, 2800);
+    }
   };
 
   // Switch active user & automatically load their respective settings & prompt history
@@ -178,13 +180,13 @@ export function App() {
       author: {
         name: currentUser.name,
         role: currentUser.role,
-        crf: currentUser.crf || 'CRF-SP 48.912',
+        crf: currentUser.crf,
         avatarId: avatarId || currentUser.avatarId || 'cat',
-        email: currentUser.email || 'auditoria@saude.gov.br'
+        email: currentUser.email,
       },
       generatedAt: `${formattedDate} às ${formattedTime}`,
       generatedDateFull: `${fullDateStr} às ${formattedTime} (Horário de Brasília)`,
-      securityHash: `MD-SEC-${patient.protocolNumber.replace(/[^0-9]/g, '') || 'REG7'}-X7`,
+      securityHash: patient.securityHash,
       isProtected: true
     };
 
@@ -210,7 +212,7 @@ export function App() {
             setCurrentScreen('nova-analise');
           }} 
         />
-        <Toast message={toastMessage} />
+        <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
       </div>
     );
   }
@@ -265,6 +267,7 @@ export function App() {
             <NovaAnaliseScreen
               onStartAnalysis={handleStartAnalysis}
               onShowNotice={showToast}
+              currentUser={currentUser}
               activePrompt={userSettings.activePrompt}
               onOpenPromptEditor={() => setIsPromptEditorOpen(true)}
               onDraftStateChange={setHasNovaAnaliseDraft}
@@ -293,13 +296,13 @@ export function App() {
                 author: {
                   name: currentUser.name,
                   role: currentUser.role,
-                  crf: currentUser.crf || 'CRF-SP 48.912',
+                  crf: currentUser.crf,
                   avatarId: avatarId || currentUser.avatarId || 'cat',
-                  email: currentUser.email || 'auditoria@saude.gov.br'
+                  email: currentUser.email,
                 },
-                generatedAt: 'Hoje',
-                generatedDateFull: 'Hoje (Horário Oficial de Brasília)',
-                securityHash: `MD-SEC-${activePatient.protocolNumber.replace(/[^0-9]/g, '') || '0000'}-X7`,
+                generatedAt: 'Não informado',
+                generatedDateFull: 'Não informado',
+                securityHash: activePatient.securityHash,
                 isProtected: true
               }}
               currentUser={currentUser}
@@ -386,7 +389,7 @@ export function App() {
       />
 
       {/* Action Feedback Toast */}
-      <Toast message={toastMessage} />
+      <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
     </div>
   );
 }

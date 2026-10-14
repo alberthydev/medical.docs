@@ -7,7 +7,7 @@ import {
 } from '../types';
 import { parseParecerMarkdown } from '../utils/parecerParser';
 import { Avatar } from './Avatar';
-import { LOGO_URL } from '../data/mockData';
+import { LOGO_URL } from '../data/branding';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { 
@@ -94,9 +94,9 @@ export const ParecerCompartilhadoScreen: React.FC<ParecerCompartilhadoScreenProp
     ? XCircle 
     : AlertTriangle;
 
-  const patientName = parsed.identificacao['Paciente'] || sharedData?.patient.patientName || 'Paciente Identificado';
+  const patientName = parsed.identificacao['Paciente'] || sharedData?.patient.patientName || 'Não informado';
   const cidValue = parsed.identificacao['CID-10'] || parsed.identificacao['CID'] || sharedData?.patient.cid10 || 'CID-10';
-  const drugValue = parsed.identificacao['Medicamento solicitado'] || parsed.identificacao['Medicamento'] || sharedData?.patient.requestedDrug || 'Medicamento Solicitado';
+  const drugValue = parsed.identificacao['Medicamento solicitado'] || parsed.identificacao['Medicamento'] || sharedData?.patient.requestedDrug || 'Não informado';
 
   // Fallback author info if not explicitly set
   const authorName = sharedData?.author?.name || 'Auditor autenticado';

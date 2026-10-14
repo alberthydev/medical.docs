@@ -2,13 +2,13 @@ import express from "express";
 import path from "path";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
-import OpenAI from "openai";
+import { GoogleGenAI, type Part } from "@google/genai";
 import dotenv from "dotenv";
 import { FULL_SYSTEM_PROMPT } from "./src/data/fullSystemPrompt";
 
 dotenv.config();
 
-let openAiClient: OpenAI | null = null;
+let geminiClient: GoogleGenAI | null = null;
 const sessions = new Map<string, { user: AdminUser; expiresAt: number }>();
 
 interface AdminUser {
@@ -17,6 +17,7 @@ interface AdminUser {
   role: string;
   email: string;
   avatarId: string;
+  crf?: string;
 }
 
 interface ScrapedPcdt {
@@ -110,7 +111,8 @@ const adminUser: AdminUser = {
   name: process.env.ADMIN_NAME || "Administrador",
   role: "Administrador geral",
   email: process.env.ADMIN_EMAIL || "admin@medicaldocs.local",
-  avatarId: "cat"
+  avatarId: "cat",
+  crf: process.env.ADMIN_CRF || undefined
 };
 
 function createSession(res: express.Response, user: AdminUser) {
@@ -130,15 +132,15 @@ function getSessionUser(req: express.Request): AdminUser | null {
   return session.user;
 }
 
-function getOpenAIClient(): OpenAI | null {
-  const key = process.env.OPENAI_API_KEY;
+function getGeminiClient(): GoogleGenAI | null {
+  const key = process.env.GEMINI_API_KEY;
   if (!key || key.trim().length === 0) {
     return null;
   }
-  if (!openAiClient) {
-    openAiClient = new OpenAI({ apiKey: key.trim() });
+  if (!geminiClient) {
+    geminiClient = new GoogleGenAI({ apiKey: key.trim() });
   }
-  return openAiClient;
+  return geminiClient;
 }
 
 async function startServer() {
@@ -237,10 +239,10 @@ async function startServer() {
 
   // Health check API
   app.get("/api/health", (req, res) => {
-    const hasKey = Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().length > 0);
-    res.json({ 
-      status: "ok", 
-      hasOpenAiKey: hasKey 
+    const hasKey = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0);
+    res.json({
+      status: "ok",
+      hasGeminiKey: hasKey
     });
   });
 
@@ -260,23 +262,23 @@ async function startServer() {
     }
   });
 
-  // Analyze API route - receives PCDT and Patient files/texts and calls OpenAI ChatGPT API
+  // Analyze API route - receives PCDT and patient files/texts and calls Gemini
   app.post("/api/analyze", async (req, res) => {
     try {
       if (!getSessionUser(req)) {
         return res.status(401).json({ error: "Sessão expirada. Faça login novamente." });
       }
-      const { 
-        pcdtText, 
-        patientDossierText, 
-        pcdtFileName, 
+      const {
+        pcdtText,
+        patientDossierText,
+        pcdtFileName,
         patientFileNames,
         files,
         customPromptAddition,
         systemPrompt
       } = req.body;
 
-      const client = getOpenAIClient();
+      const client = getGeminiClient();
 
       if (client) {
         const userPrompt = `[ARQUIVO 1: PCDT E/OU RESUMO DA PATOLOGIA/PROTOCOLO APLICÁVEL]
@@ -291,54 +293,74 @@ ${patientDossierText || 'Documentos digitalizados do processo do paciente para c
 ${customPromptAddition ? `\nInstruções adicionais: ${customPromptAddition}` : ''}`;
 
         const uploadedFiles = Array.isArray(files) ? files : [];
-        const fileInputs = uploadedFiles
+        const fileInputs: Part[] = uploadedFiles
           .filter((file) =>
             file &&
             typeof file.name === "string" &&
             typeof file.data === "string" &&
-            file.data.startsWith("data:")
+            /^data:application\/pdf;base64,/i.test(file.data)
           )
-          .map((file) => ({
-            type: "input_file" as const,
-            filename: file.name,
-            file_data: file.data,
-          }));
+          .map((file) => {
+            const match = file.data.match(/^data:([^;,]+);base64,(.+)$/s);
+            if (!match) {
+              throw new Error(`Arquivo PDF inválido: ${file.name}`);
+            }
+            return {
+              inlineData: {
+                mimeType: match[1],
+                data: match[2]
+              }
+            };
+          });
 
-        const response = await client.responses.create({
-          model: "gpt-4o",
-          instructions: `${systemPrompt && systemPrompt.trim().length > 0 ? systemPrompt : FULL_SYSTEM_PROMPT}
+        const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+        const response = await client.models.generateContent({
+          model,
+          config: {
+            systemInstruction: `${systemPrompt && systemPrompt.trim().length > 0 ? systemPrompt : FULL_SYSTEM_PROMPT}
 
 Responda exclusivamente em Markdown válido, sem cercar a resposta com blocos de código. Preserve os títulos, tabelas e listas exigidos pelo prompt.`,
-          input: [
-            {
-              role: "user",
-              content: [
-                { type: "input_text", text: userPrompt },
-                ...fileInputs
-              ]
-            }
-          ],
-          temperature: 0.1,
+            temperature: 0.1
+          },
+          contents: [{
+            role: "user",
+            parts: [
+              { text: userPrompt },
+              ...fileInputs
+            ]
+          }]
         });
 
-        const markdownResult = response.output_text || "";
+        const markdownResult = response.text || "";
 
         return res.json({
           markdown: markdownResult,
-          model: "gpt-4o",
-          source: "openai-api",
+          protocolNumber: `PROC-${new Date().getFullYear()}-${crypto.randomUUID()}`,
+          securityHash: `SHA-256:${crypto.createHash("sha256").update(markdownResult, "utf8").digest("hex")}`,
+          model,
+          source: "gemini-api",
           filesSent: fileInputs.length
         });
       }
 
       return res.status(503).json({
-        error: "OPENAI_API_KEY não configurada. Configure a chave no arquivo .env para executar a análise."
+        error: "GEMINI_API_KEY não configurada. Configure a chave no arquivo .env para executar a análise."
       });
 
     } catch (error: any) {
       console.error("Erro na rota /api/analyze:", error);
-      return res.status(500).json({ 
-        error: error.message || "Erro interno ao processar a auditoria com a OpenAI." 
+      const errorStatus = typeof error?.status === "number"
+        ? error.status
+        : typeof error?.code === "number"
+          ? error.code
+          : 500;
+      if (errorStatus === 429 || /quota|resource exhausted|rate limit|too many requests/i.test(String(error?.message || ""))) {
+        return res.status(503).json({
+          error: "Sem tokens disponíveis para realizar a análise. Contate o Administrador."
+        });
+      }
+      return res.status(500).json({
+        error: error.message || "Erro interno ao processar a auditoria com o Gemini."
       });
     }
   });

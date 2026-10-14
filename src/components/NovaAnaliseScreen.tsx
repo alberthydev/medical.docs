@@ -21,17 +21,17 @@ import {
   UploadCloud,
   FileSearch
 } from 'lucide-react';
-import { PatientAnalysis } from '../types';
+import { AppUser, PatientAnalysis } from '../types';
 import {
   parseStandardFileName,
   PcdtScrapedResult,
-  ParsedFileInfo,
-  OFFICIAL_PCDT_REGISTRY
+  ParsedFileInfo
 } from '../utils/pcdtScraper';
 
 interface NovaAnaliseScreenProps {
   onStartAnalysis: (markdownText: string, patientData?: PatientAnalysis) => void;
   onShowNotice: (msg: string) => void;
+  currentUser: AppUser;
   onDraftStateChange?: (hasDraft: boolean) => void;
   activePrompt?: string;
   onOpenPromptEditor?: () => void;
@@ -59,6 +59,7 @@ interface ApiFile {
 export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   onStartAnalysis,
   onShowNotice,
+  currentUser,
   onDraftStateChange,
   activePrompt,
   onOpenPromptEditor
@@ -166,15 +167,33 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   const processUploadedFiles = (fileList: File[]) => {
     if (!fileList || fileList.length === 0) return;
 
+    if (fileList.length > 1) {
+      setUploadError({
+        filename: `${fileList.length} arquivos selecionados`,
+        message: 'A análise aceita somente um arquivo PDF por vez. Remova os arquivos adicionais e selecione apenas o PDF que será avaliado.'
+      });
+      onShowNotice('Selecione somente um arquivo PDF por análise.');
+      return;
+    }
+
+    const selectedFile = fileList[0];
+    if (!/\.pdf$/i.test(selectedFile.name)) {
+      setUploadError({
+        filename: selectedFile.name,
+        message: 'A análise aceita somente arquivos PDF. Selecione um PDF do processo do paciente.'
+      });
+      onShowNotice('Somente arquivos PDF podem ser avaliados.');
+      return;
+    }
+
     // Check if at least one file follows the required CID10-Patologia-Nome pattern
-    const validFile = fileList.find(f => {
-      const parsed = parseStandardFileName(f.name);
-      return parsed.hasStandardPattern;
-    });
+    const validFile = parseStandardFileName(selectedFile.name).hasStandardPattern
+      ? selectedFile
+      : undefined;
 
     if (!validFile) {
       // Non-standard filename: Reject the file completely and set error notice
-      const rejectedFileName = fileList[0].name;
+      const rejectedFileName = selectedFile.name;
       const usesCidLabel = /^cid[-_]/i.test(rejectedFileName.replace(/\.[^/.]+$/, '').trim());
       const expectedPattern = usesCidLabel
         ? 'J45-Asma-Nome_do_Paciente.pdf (use o código CID-10 real; "CID" não é um código)'
@@ -194,20 +213,20 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     const detectedInfo = parseStandardFileName(validFile.name);
     setExtractedMetadata(detectedInfo);
 
-    const newUploadedFiles: UploadedFile[] = fileList.map((f, idx) => ({
-      id: `patient-file-${Date.now()}-${idx}`,
-      name: f.name,
-      size: `${(f.size / 1024).toFixed(0)} KB`,
-      file: f,
-      parsedInfo: parseStandardFileName(f.name)
-    }));
+    const newUploadedFiles: UploadedFile[] = [{
+      id: `patient-file-${Date.now()}`,
+      name: selectedFile.name,
+      size: `${(selectedFile.size / 1024).toFixed(0)} KB`,
+      file: selectedFile,
+      parsedInfo: parseStandardFileName(selectedFile.name)
+    }];
 
     setPatientFiles(newUploadedFiles);
     onDraftStateChange?.(true);
-    onShowNotice(`${fileList.length} documento(s) recebido(s). Buscando PCDT oficial...`);
+    onShowNotice('PDF recebido. Buscando PCDT oficial...');
 
     // Trigger web scraping automatically
-    performPcdtAutoScraping(detectedInfo.cid, detectedInfo.pathology, validFile.name);
+    performPcdtAutoScraping(detectedInfo.cid, detectedInfo.pathology, selectedFile.name);
   };
 
   // Upload Patient Files Handler
@@ -330,13 +349,14 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error(`Erro na API (${response.status})`);
+        const errorData = await response.json().catch(() => null) as { error?: string } | null;
+        throw new Error(errorData?.error || `Erro na API (${response.status})`);
       }
 
       const data = await response.json();
       const markdown = data.markdown || '';
 
-      const generatedProtocolNumber = `PROC-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+      const generatedProtocolNumber = data.protocolNumber;
       const now = new Date();
       const formattedDate = now.toLocaleDateString('pt-BR');
       const formattedTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -348,33 +368,35 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       const newPatientData: PatientAnalysis = {
         id: `proc-${Date.now()}`,
         protocolNumber: generatedProtocolNumber,
-        patientName: extractedMetadata.patientName || 'Paciente Identificado',
-        cpfMasked: '000.***.***-00',
-        susState: 'SUS-SP',
-        cid10: extractedMetadata.cid || 'CID Informado',
-        diseaseName: extractedMetadata.pathology || (scrapedPcdt?.pcdtName || 'Patologia Auditada'),
-        requestedDrug: scrapedPcdt?.principaisMedicamentos?.[0] || 'Medicamento Solicitado',
-        dosage: 'Dose prescrita conforme relatório médico',
-        prescriberName: 'Médico Assistente Especialista',
-        prescriberCrm: 'CRM Regular',
+        patientName: extractedMetadata.patientName || 'Não identificado',
+        cpfMasked: 'Não informado',
+        susState: 'Não informado',
+        cid10: extractedMetadata.cid || 'Não informado',
+        diseaseName: extractedMetadata.pathology || (scrapedPcdt?.pcdtName || 'Não informado'),
+        requestedDrug: scrapedPcdt?.principaisMedicamentos?.[0] || 'Não informado',
+        dosage: 'Não informado',
+        prescriberName: 'Não informado',
+        prescriberCrm: 'Não informado',
         protocolDate: formattedDate,
-        evaluationDate: `Hoje às ${formattedTime}`,
+        evaluationDate: `${formattedDate} às ${formattedTime}`,
         status: calculatedStatus,
         statusLabel: calculatedStatus === 'approved' ? 'Processo Conforme (Aprovado)' : calculatedStatus === 'rejected' ? 'Não Conforme (Indeferido)' : 'Processo com Pendência',
         statusBadgeColor: '',
-        verdictSummary: `Auditoria técnica do processo ${generatedProtocolNumber} concluída com base nas diretrizes clínicas vigentes.`,
-        clinicalMeritSummary: 'Conformidade técnica avaliada em relação aos critérios do PCDT e documentação clínica anexada.',
+        verdictSummary: 'Consultar o parecer Markdown gerado pela análise.',
+        clinicalMeritSummary: 'Consultar o parecer Markdown gerado pela análise.',
         administrativeIssues: [],
         clinicalMetrics: [],
         complianceMatrix: [],
-        officialDispatchText: `Parecer técnico conclusivo expedido pelo auditor responsável.`,
-        auditorName: 'Auditor Farmacêutico',
+        officialDispatchText: 'Consultar o parecer Markdown gerado pela análise.',
+        auditorName: currentUser.name,
+        auditorCrf: currentUser.crf,
+        securityHash: data.securityHash,
         generatedDateFull: `${formattedDate} às ${formattedTime} (Horário de Brasília)`,
         markdown: markdown
       };
 
-      if (data.source === 'openai-api') {
-        onShowNotice('Auditoria concluída com sucesso via OpenAI ChatGPT (GPT-4o)!');
+      if (data.source === 'gemini-api') {
+        onShowNotice(`Auditoria concluída com sucesso via Gemini (${data.model || 'modelo configurado'})!`);
       } else {
         onShowNotice('Auditoria clínica gerada com base nas diretrizes do processo!');
       }
@@ -384,7 +406,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     } catch (err: any) {
       console.warn('Erro ao chamar API de análise:', err);
       setIsAnalyzing(false);
-      onShowNotice('Erro ao processar a auditoria. Verifique a conexão com o servidor.');
+      onShowNotice(err?.message || 'Erro ao processar a auditoria. Verifique a conexão com o servidor.');
     }
   };
 
@@ -450,8 +472,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
           <input
             ref={patientFileInputRef}
             type="file"
-            multiple
-            accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.txt"
+            accept=".pdf,application/pdf"
             onChange={handlePatientFilesUpload}
             className="hidden"
           />
@@ -491,6 +512,36 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
                 </button>
               </div>
             </div>
+          ) : patientFiles.length > 0 ? (
+            <div className="p-5 rounded-xl border border-[#cbe3d4] bg-[#f5fbf6] flex items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-lg bg-white border border-[#cbe3d4] flex items-center justify-center shrink-0">
+                  <FileText className="w-5 h-5 text-[#33694b]" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-[#0f2137] truncate">
+                    {patientFiles[0].name}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-[10px] text-[#74777d]">{patientFiles[0].size}</span>
+                    {patientFiles[0].parsedInfo?.hasStandardPattern && (
+                      <span className="text-[9px] bg-[#ebf3ed] text-[#33694b] font-mono px-1.5 py-0.5 rounded font-bold border border-[#cbe3d4]">
+                        {patientFiles[0].parsedInfo.cid}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleRemovePatientFile(patientFiles[0].id)}
+                className="p-2 rounded-lg text-[#74777d] hover:text-[#ba1a1a] hover:bg-white transition-colors cursor-pointer shrink-0"
+                title="Remover PDF e buscar outro"
+                aria-label="Remover PDF e buscar outro"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
           ) : (
             <div
               onClick={() => patientFileInputRef.current?.click()}
@@ -507,46 +558,13 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
                 <UploadCloud className="w-6 h-6" />
               </div>
               <p className="text-sm font-semibold text-[#0f2137]">
-                Clique para selecionar ou arraste os documentos do processo
+                Clique para selecionar ou arraste o PDF do processo
               </p>
               <p className="text-xs text-[#74777d]">
-                Arquivo principal obrigatório: <span className="font-mono font-medium text-[#0f2137] bg-white px-2 py-0.5 rounded border border-[#e5e2dd]">CID10-Patologia-Nome_do_Paciente.pdf</span>
+                Um único PDF: <span className="font-mono font-medium text-[#0f2137] bg-white px-2 py-0.5 rounded border border-[#e5e2dd]">CID10-Patologia-Nome_do_Paciente.pdf</span>
               </p>
             </div>
           )}
-
-          {/* List of Attached Documents */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#44474d] block">
-              Documentos Anexados ao Processo ({patientFiles.length}):
-            </label>
-            {patientFiles.map((file) => (
-              <div
-                key={file.id}
-                className="p-2.5 rounded-xl bg-[#fcf9f4] border border-[#e5e2dd] flex items-center justify-between gap-3 text-xs"
-              >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <FileText className="w-4 h-4 text-[#74777d] shrink-0" />
-                  <span className="font-medium text-[#0f2137] truncate">{file.name}</span>
-                  <span className="text-[10px] text-[#74777d] shrink-0">{file.size}</span>
-                  {file.parsedInfo?.hasStandardPattern && (
-                    <span className="text-[9px] bg-[#ebf3ed] text-[#33694b] font-mono px-1.5 py-0.5 rounded font-bold border border-[#cbe3d4]">
-                      {file.parsedInfo.cid}
-                    </span>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleRemovePatientFile(file.id)}
-                  className="p-1 rounded-md text-[#74777d] hover:text-[#ba1a1a] transition-colors cursor-pointer"
-                  title="Remover documento"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
 
           {/* Clinical Dossier Summary Text */}
           <div className="pt-2">
@@ -639,7 +657,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
                       title="Buscar e atualizar diretriz via web scraping"
                     >
                       <RefreshCw className="w-3.5 h-3.5 text-[#5d6066]" />
-                      <span>Atualizar Scraping</span>
+                      <span>Buscar Novamente</span>
                     </button>
 
                     <button

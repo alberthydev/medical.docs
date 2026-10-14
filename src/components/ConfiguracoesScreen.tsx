@@ -420,7 +420,7 @@ export const ConfiguracoesScreen: React.FC<ConfiguracoesScreenProps> = ({
             <Sparkles className="w-4 h-4 text-[#0f2137]" />
             <div>
               <h2 className="text-sm sm:text-base font-bold text-[#0f2137]">
-                4. Diretrizes do Prompt do Sistema (IA / GPT-4o)
+                4. Diretrizes do Prompt do Sistema (IA / Gemini)
               </h2>
               <p className="text-xs text-[#74777d]">
                 Instruções analíticas executadas pela API ao comparar documentos do paciente e o PCDT.
