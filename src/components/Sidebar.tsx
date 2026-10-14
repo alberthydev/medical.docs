@@ -20,6 +20,7 @@ interface SidebarProps {
   currentUser?: AppUser;
   avatarId?: string;
   hasParecer?: boolean;
+  hasNovaAnaliseDraft?: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -30,7 +31,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onLogout,
   currentUser,
   avatarId = 'cat',
-  hasParecer = true
+  hasParecer = true,
+  hasNovaAnaliseDraft = false
 }) => {
   const navItems: Array<{ id: ScreenId; label: string; icon: React.ComponentType<{ className?: string }>; count?: string }> = [
     {
@@ -127,6 +129,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           const Icon = item.icon;
           const isActive = currentScreen === item.id;
           const isParecerInBackground = item.id === 'parecer' && hasParecer && !isActive;
+          const isNovaAnaliseInBackground = item.id === 'nova-analise' && hasNovaAnaliseDraft && !isActive;
 
           return (
             <button
@@ -137,27 +140,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   ? `w-10 h-10 rounded-xl flex items-center justify-center ${
                       isActive
                         ? 'bg-white text-[#0f2137] shadow-xs font-semibold border border-[#e5e2dd]'
-                        : isParecerInBackground
+                        : isParecerInBackground || isNovaAnaliseInBackground
                           ? 'bg-transparent text-[#1c1c19] hover:bg-[#f0ede9]'
                           : 'text-[#44474d] hover:bg-[#f0ede9] hover:text-[#0f2137]'
                     }`
                   : `w-full h-9 rounded-xl px-2.5 flex items-center gap-2.5 text-xs font-medium ${
                       isActive
                         ? 'bg-white text-[#0f2137] shadow-xs font-semibold border border-[#e5e2dd]'
-                        : isParecerInBackground
+                        : isParecerInBackground || isNovaAnaliseInBackground
                           ? 'bg-transparent text-[#1c1c19] font-medium hover:bg-[#f0ede9]'
                           : 'text-[#44474d] hover:bg-[#f0ede9] hover:text-[#0f2137]'
                     }`
               }`}
               title={
                 isCollapsed 
-                  ? (isParecerInBackground ? `${item.label} (aberto em segundo plano)` : item.label) 
+                  ? (isParecerInBackground || isNovaAnaliseInBackground ? `${item.label} (informações preenchidas)` : item.label) 
                   : undefined
               }
             >
               <Icon 
                 className={`w-4 h-4 shrink-0 transition-colors ${
-                  isActive || isParecerInBackground ? 'text-[#0f2137]' : 'text-[#74777d] group-hover:text-[#0f2137]'
+                  isActive || isParecerInBackground || isNovaAnaliseInBackground ? 'text-[#0f2137]' : 'text-[#74777d] group-hover:text-[#0f2137]'
                 }`} 
               />
               
@@ -166,7 +169,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span className="truncate">{item.label}</span>
                   
                   {/* Trailing slot with fixed dimensions for perfect vertical and horizontal alignment */}
-                  {(item.count || isParecerInBackground) && (
+                  {(item.count || isParecerInBackground || isNovaAnaliseInBackground) && (
                     <div className="w-6 h-5 flex items-center justify-center shrink-0">
                       {item.count && (
                         <span 
@@ -179,10 +182,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           {item.count}
                         </span>
                       )}
-                      {isParecerInBackground && (
+                      {(isParecerInBackground || isNovaAnaliseInBackground) && (
                         <span 
                           className="w-1.5 h-1.5 rounded-full bg-[#33694b] shrink-0" 
-                          title="Parecer aberto em segundo plano"
+                          title="Informações preenchidas"
                         />
                       )}
                     </div>
@@ -193,7 +196,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {isCollapsed && isActive && (
                 <span className="absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-4 bg-[#0f2137] rounded-full" />
               )}
-              {isCollapsed && isParecerInBackground && (
+              {isCollapsed && (isParecerInBackground || isNovaAnaliseInBackground) && (
                 <span 
                   className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#33694b] ring-1.5 ring-[#fcf9f4]" 
                   title="Parecer aberto em segundo plano"

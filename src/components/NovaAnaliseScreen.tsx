@@ -1,37 +1,38 @@
 import React, { useState, useRef } from 'react';
-import { 
-  Upload, 
-  FileText, 
-  Sparkles, 
-  ArrowRight, 
-  BookOpen, 
-  Check, 
-  AlertCircle, 
-  Loader2, 
-  Trash2, 
-  ChevronDown, 
-  Globe, 
-  RefreshCw, 
-  Tag, 
-  UserCheck, 
-  Stethoscope, 
-  ExternalLink, 
-  ShieldCheck, 
-  Zap, 
-  UploadCloud, 
-  FileSearch 
+import {
+  Upload,
+  FileText,
+  Sparkles,
+  ArrowRight,
+  BookOpen,
+  Check,
+  AlertCircle,
+  Loader2,
+  Trash2,
+  ChevronDown,
+  Globe,
+  RefreshCw,
+  Tag,
+  UserCheck,
+  Stethoscope,
+  ExternalLink,
+  ShieldCheck,
+  Zap,
+  UploadCloud,
+  FileSearch
 } from 'lucide-react';
 import { PatientAnalysis } from '../types';
-import { 
-  parseStandardFileName, 
-  PcdtScrapedResult, 
+import {
+  parseStandardFileName,
+  PcdtScrapedResult,
   ParsedFileInfo,
-  OFFICIAL_PCDT_REGISTRY 
+  OFFICIAL_PCDT_REGISTRY
 } from '../utils/pcdtScraper';
 
 interface NovaAnaliseScreenProps {
   onStartAnalysis: (markdownText: string, patientData?: PatientAnalysis) => void;
   onShowNotice: (msg: string) => void;
+  onDraftStateChange?: (hasDraft: boolean) => void;
   activePrompt?: string;
   onOpenPromptEditor?: () => void;
 }
@@ -58,6 +59,7 @@ interface ApiFile {
 export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   onStartAnalysis,
   onShowNotice,
+  onDraftStateChange,
   activePrompt,
   onOpenPromptEditor
 }) => {
@@ -93,6 +95,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
 
   const patientFileInputRef = useRef<HTMLInputElement>(null);
   const manualPcdtInputRef = useRef<HTMLInputElement>(null);
+  const pcdtScrapeRequestRef = useRef(0);
 
   const fileToDataUrl = (file: File): Promise<string> => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -109,7 +112,9 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
 
   // Trigger automated web scraping when metadata CID/Pathology changes
   const performPcdtAutoScraping = async (cid: string, pathology: string, filename: string) => {
+    const requestId = ++pcdtScrapeRequestRef.current;
     setIsScrapingPcdt(true);
+    setScrapedPcdt(null);
     setManualPcdtFile(null);
     setScrapingStepMessage(`Lendo padrão no nome do arquivo: "${filename}"...`);
 
@@ -134,8 +139,11 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
         ? await scrapeResponse.json() as PcdtScrapedResult & { summaryFile?: ScrapedSummaryFile }
         : null;
       const result = scrapedResult;
-      
+
+      if (requestId !== pcdtScrapeRequestRef.current) return;
+
       setTimeout(() => {
+        if (requestId !== pcdtScrapeRequestRef.current) return;
         setScrapedPcdt(result);
         setIsScrapingPcdt(false);
         if (result) {
@@ -146,6 +154,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       }, 1400);
 
     } catch (err) {
+      if (requestId !== pcdtScrapeRequestRef.current) return;
       console.error('Erro ao baixar o resumo oficial do PCDT:', err);
       setScrapedPcdt(null);
       setIsScrapingPcdt(false);
@@ -194,6 +203,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     }));
 
     setPatientFiles(newUploadedFiles);
+    onDraftStateChange?.(true);
     onShowNotice(`${fileList.length} documento(s) recebido(s). Buscando PCDT oficial...`);
 
     // Trigger web scraping automatically
@@ -210,7 +220,27 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   };
 
   const handleRemovePatientFile = (id: string) => {
-    setPatientFiles(prev => prev.filter(f => f.id !== id));
+    setPatientFiles(prev => {
+      const next = prev.filter(f => f.id !== id);
+      if (next.length === 0) {
+        pcdtScrapeRequestRef.current += 1;
+        setIsScrapingPcdt(false);
+        setExtractedMetadata({
+          rawFileName: '',
+          cid: '',
+          pathology: '',
+          patientName: '',
+          hasStandardPattern: false
+        });
+        setScrapedPcdt(null);
+        setManualPcdtFile(null);
+        setScrapingStepMessage('');
+        onDraftStateChange?.(Boolean(patientDossierNotes.trim()));
+      } else {
+        onDraftStateChange?.(true);
+      }
+      return next;
+    });
   };
 
   // Manual PCDT upload handler
@@ -225,6 +255,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
         file
       };
       setManualPcdtFile(manualUploaded);
+      onDraftStateChange?.(true);
 
       const customScraped: PcdtScrapedResult = {
         pcdtId: `manual-${Date.now()}`,
@@ -250,12 +281,12 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       return;
     }
 
-    const pcdtContentToUse = scrapedPcdt 
-      ? scrapedPcdt.criteriosResumo 
+    const pcdtContentToUse = scrapedPcdt
+      ? scrapedPcdt.criteriosResumo
       : `DIRETRIZ CLÍNICA PARA ${extractedMetadata.pathology.toUpperCase() || 'PATOLOGIA DO PROCESSO'} (CID ${extractedMetadata.cid || 'NÃO ESPECIFICADO'}):\nUtilize as diretrizes clínicas e critérios de inclusão/escalonamento vigentes do SUS para a patologia informada.`;
 
-    const pcdtFileNameToUse = manualPcdtFile 
-      ? manualPcdtFile.name 
+    const pcdtFileNameToUse = manualPcdtFile
+      ? manualPcdtFile.name
       : (scrapedPcdt ? `${scrapedPcdt.pcdtName}.pdf` : `PCDT_${extractedMetadata.cid || 'Diretriz'}_Diretriz.pdf`);
 
     setIsAnalyzing(true);
@@ -309,7 +340,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       const now = new Date();
       const formattedDate = now.toLocaleDateString('pt-BR');
       const formattedTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      
+
       const isApproved = markdown.toUpperCase().includes('DEFERIMENTO') && !markdown.toUpperCase().includes('INDEFERIMENTO') && !markdown.toUpperCase().includes('PENDÊNCIA');
       const isRejected = markdown.toUpperCase().includes('INDEFERIMENTO');
       const calculatedStatus: 'approved' | 'rejected' | 'pending' = isApproved ? 'approved' : isRejected ? 'rejected' : 'pending';
@@ -366,7 +397,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
         </h1>
 
         <p className="text-xs sm:text-sm text-[#74777d] leading-relaxed">
-          Faça o upload dos documentos do paciente. O sistema reconhece o padrão <code className="bg-[#f6f3ee] text-[#0f2137] px-1.5 py-0.5 rounded font-mono font-semibold text-[11px] border border-[#e5e2dd]">CID10-Patologia-Nome</code>, realiza o <strong>web scraping do PCDT oficial</strong> no portal CONITEC/Ministério da Saúde e gera o parecer técnico.
+          Faça o upload dos documentos do paciente. O sistema reconhece o padrão <code className="bg-[#f6f3ee] text-[#0f2137] px-1.5 py-0.5 rounded font-mono font-semibold text-[11px] border border-[#e5e2dd]">CID10-Patologia-Nome</code>, busca no portal CONITEC/Ministério da Saúde e gera o parecer técnico.
         </p>
 
         {/* Active Prompt Info */}
@@ -416,13 +447,13 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
           </div>
 
           {/* Upload Dropzone or Non-Standard Error Card */}
-          <input 
+          <input
             ref={patientFileInputRef}
-            type="file" 
-            multiple 
+            type="file"
+            multiple
             accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.txt"
             onChange={handlePatientFilesUpload}
-            className="hidden" 
+            className="hidden"
           />
 
           {uploadError ? (
@@ -461,7 +492,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
               </div>
             </div>
           ) : (
-            <div 
+            <div
               onClick={() => patientFileInputRef.current?.click()}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
@@ -490,7 +521,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
               Documentos Anexados ao Processo ({patientFiles.length}):
             </label>
             {patientFiles.map((file) => (
-              <div 
+              <div
                 key={file.id}
                 className="p-2.5 rounded-xl bg-[#fcf9f4] border border-[#e5e2dd] flex items-center justify-between gap-3 text-xs"
               >
@@ -524,7 +555,10 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
             </label>
             <textarea
               value={patientDossierNotes}
-              onChange={(e) => setPatientDossierNotes(e.target.value)}
+              onChange={(e) => {
+                setPatientDossierNotes(e.target.value);
+                onDraftStateChange?.(Boolean(e.target.value.trim()) || patientFiles.length > 0 || Boolean(scrapedPcdt));
+              }}
               rows={3}
               className="w-full p-3 rounded-xl font-mono text-xs text-[#0f2137] bg-[#fcf9f4] border border-[#e5e2dd] focus:outline-none focus:border-[#0f2137] leading-relaxed resize-y"
               placeholder="Notas clínicas complementares ou texto extraído dos laudos..."
@@ -542,7 +576,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
                 2
               </span>
               <h2 className="text-sm sm:text-base font-bold text-[#0f2137]">
-                PCDT Oficial (Capturado Automaticamente via Web Scraping)
+                PCDT
               </h2>
             </div>
           </div>
@@ -567,7 +601,7 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
               </div>
               <div className="space-y-1">
                 <p className="text-xs sm:text-sm font-bold text-[#0f2137]">
-                  Executando Web Scraping do PCDT Oficial...
+                  Buscando PCDT Oficial...
                 </p>
                 <p className="text-[11px] text-[#74777d] font-mono">
                   {scrapingStepMessage}

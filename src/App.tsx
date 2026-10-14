@@ -50,6 +50,7 @@ export function App() {
   const [sharedParecerData, setSharedParecerData] = useState<SharedParecerDetails | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [avatarId, setAvatarId] = useState<AvatarId>(() => (getCurrentUser().avatarId as AvatarId) || 'cat');
+  const [hasNovaAnaliseDraft, setHasNovaAnaliseDraft] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/me', { credentials: 'include' })
@@ -237,6 +238,7 @@ export function App() {
         currentUser={currentUser}
         avatarId={avatarId}
         hasParecer={hasActiveParecer}
+        hasNovaAnaliseDraft={hasNovaAnaliseDraft}
       />
 
       {/* Main Column */}
@@ -259,14 +261,15 @@ export function App() {
 
         {/* Content Container */}
         <main className="flex-1 pb-24 md:pb-12">
-          {currentScreen === 'nova-analise' && (
-            <NovaAnaliseScreen 
+          <div className={currentScreen === 'nova-analise' ? 'block' : 'hidden'}>
+            <NovaAnaliseScreen
               onStartAnalysis={handleStartAnalysis}
               onShowNotice={showToast}
               activePrompt={userSettings.activePrompt}
               onOpenPromptEditor={() => setIsPromptEditorOpen(true)}
+              onDraftStateChange={setHasNovaAnaliseDraft}
             />
-          )}
+          </div>
 
           {currentScreen === 'parecer' && (
             <ParecerScreen 
