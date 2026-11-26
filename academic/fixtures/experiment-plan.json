@@ -1,0 +1,48 @@
+{
+  "experiment_version": "1.0.0",
+  "fixture_sha256": "8a1dd6b643f57e5a59ac8259402e4ef355a7d91d6f72168125c4c7e777632657",
+  "reference_date": "2026-11-25",
+  "seeds": [
+    5,
+    17,
+    29,
+    43,
+    67
+  ],
+  "subsets": [
+    "desenvolvimento",
+    "avaliacao"
+  ],
+  "primary_subset": "avaliacao",
+  "primary_metric": "percentual_de_classes_finais_corretas",
+  "hypotheses": [
+    "Ordenar disparos por especificidade pode mudar a trilha, preservando as conclusões no grafo de produtor único.",
+    "Priorizar a incerteza na consolidação pode converter uma não conformidade independente em pendência sem produzir conformidade falsa.",
+    "Permutar casos, fatos e regras não deve alterar classificações dentro da mesma configuração."
+  ],
+  "configurations": [
+    {
+      "label": "Checklist fixo"
+    },
+    {
+      "label": "Prioridade / evidência conclusiva",
+      "agenda_strategy": "prioridade",
+      "aggregation": "violacao_primeiro"
+    },
+    {
+      "label": "Especificidade / evidência conclusiva",
+      "agenda_strategy": "especificidade",
+      "aggregation": "violacao_primeiro"
+    },
+    {
+      "label": "Prioridade / incerteza",
+      "agenda_strategy": "prioridade",
+      "aggregation": "incerteza_primeiro"
+    },
+    {
+      "label": "Especificidade / incerteza",
+      "agenda_strategy": "especificidade",
+      "aggregation": "incerteza_primeiro"
+    }
+  ]
+}

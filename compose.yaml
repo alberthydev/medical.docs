@@ -1,0 +1,54 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_NAME: ${ADMIN_NAME:-Administrador}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_CRF: ${ADMIN_CRF:-}
+      GOVBR_CLIENT_ID: ${GOVBR_CLIENT_ID:-}
+      GOVBR_CLIENT_SECRET: ${GOVBR_CLIENT_SECRET:-}
+      GOVBR_REDIRECT_URI: ${GOVBR_REDIRECT_URI:-}
+      GOVBR_SCOPE: ${GOVBR_SCOPE:-openid email profile}
+      GOVBR_ALLOWED_SUBJECTS: ${GOVBR_ALLOWED_SUBJECTS:-}
+      PCDT_CATALOG_URL: ${PCDT_CATALOG_URL:-}
+      AI_GATEWAY_URL: http://gateway:8000
+      AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN:?configure AI_SERVICE_TOKEN}
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks: [public, internal]
+    depends_on:
+      gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  gateway:
+    build:
+      context: .
+      dockerfile: ai-gateway/Dockerfile
+    environment:
+      AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN:?configure AI_SERVICE_TOKEN}
+      AI_STATE_DIR: /srv/gateway-state
+      AI_PROVIDER: manual
+    networks: [internal]
+    volumes:
+      - gateway-state:/srv/gateway-state
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+networks:
+  public: {}
+  internal:
+    internal: true
+volumes:
+  gateway-state: {}

@@ -1,0 +1,4744 @@
+{
+  "plan_sha256": "9dbcb9fc1ca4e5c86ab78a197147d47e8e0355893f72844cf4548f47bf509f94",
+  "fixture_sha256": "8a1dd6b643f57e5a59ac8259402e4ef355a7d91d6f72168125c4c7e777632657",
+  "reference_date": "2026-11-25",
+  "metric": "percentual_de_classes_finais_corretas",
+  "knowledge_sha256": "73e5aae0a6ca6f127e937bc1a57362fa1635a13920029e637e415b4b85cbfb50",
+  "summary": [
+    {
+      "configuracao": "Checklist fixo",
+      "conjunto": "desenvolvimento",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.02853,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "conjunto": "avaliacao",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.024615384615384615,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "conjunto": "desenvolvimento",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.9006475,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "conjunto": "avaliacao",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.9341784615384615,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "conjunto": "desenvolvimento",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.9426100000000001,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "conjunto": "avaliacao",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.9402153846153847,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "conjunto": "desenvolvimento",
+      "repeticoes": 5,
+      "media_percentual": 87.5,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.881985,
+      "falsos_conformes_total": 0,
+      "erros_distintos": [
+        "T18"
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "conjunto": "avaliacao",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.8831123076923078,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "conjunto": "desenvolvimento",
+      "repeticoes": 5,
+      "media_percentual": 87.5,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.93626,
+      "falsos_conformes_total": 0,
+      "erros_distintos": [
+        "T18"
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "conjunto": "avaliacao",
+      "repeticoes": 5,
+      "media_percentual": 100.0,
+      "desvio_percentual": 0.0,
+      "variacao_por_semente": false,
+      "media_ms_por_caso": 0.9702446153846154,
+      "falsos_conformes_total": 0,
+      "erros_distintos": []
+    }
+  ],
+  "repetitions": [
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "desenvolvimento",
+      "semente": 5,
+      "versao": "1.0.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.0332375,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 23100
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 35700
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 42300
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 37500
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 26300
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 6500
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 31500
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 63000
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "desenvolvimento",
+      "semente": 17,
+      "versao": "1.0.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.024875,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 24900
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 36100
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 34500
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 20500
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 21200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 8400
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20500
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 32900
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "desenvolvimento",
+      "semente": 29,
+      "versao": "1.0.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.0232625,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 21400
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 22700
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 26400
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 22000
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 42600
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 6500
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21100
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 23400
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "desenvolvimento",
+      "semente": 43,
+      "versao": "1.0.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.0387125,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 35900
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 35700
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 34200
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 35400
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 94900
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 8800
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 32100
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 32700
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "desenvolvimento",
+      "semente": 67,
+      "versao": "1.0.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.0225625,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 21700
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 26400
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 22900
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 20400
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 35400
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 8100
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21800
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 23800
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "avaliacao",
+      "semente": 5,
+      "versao": "1.0.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.02754615384615385,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 36200
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21400
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 26800
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 21200
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21900
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 22700
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20900
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 23800
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21200
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 82300
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20800
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 32500
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 6400
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "avaliacao",
+      "semente": 17,
+      "versao": "1.0.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.0261,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 24100
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 23100
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 53800
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 26200
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 36100
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 23600
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 36500
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21100
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21800
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 22800
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20900
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 22400
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 6900
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "avaliacao",
+      "semente": 29,
+      "versao": "1.0.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.02288461538461538,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20900
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21700
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 22100
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 20800
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21400
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20800
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 47200
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20600
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 24500
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 28200
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 22000
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 6800
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "avaliacao",
+      "semente": 43,
+      "versao": "1.0.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.022584615384615384,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 36500
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21900
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21100
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 20700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21900
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21800
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 27900
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 22200
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21500
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 25300
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 23600
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 22600
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 6600
+        }
+      ]
+    },
+    {
+      "configuracao": "Checklist fixo",
+      "modo": null,
+      "conjunto": "avaliacao",
+      "semente": 67,
+      "versao": "1.0.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.02396153846153846,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20000
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 20800
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 24600
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 20700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21900
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 33000
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 22900
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 21300
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 25500
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 23900
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 34600
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 35200
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 7100
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.966175,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1059500
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 867500
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 933700
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1087600
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 984900
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 812100
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 940100
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1044000
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9357625,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1016700
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 836300
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1144900
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 902700
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1194300
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 602100
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 901000
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 888100
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8729125,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 931100
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 844400
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 886100
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 871300
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1123000
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 657400
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 861900
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 808100
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.890825,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 796800
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 871400
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 919400
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 846100
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 969900
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 633600
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1143700
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 945700
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8375625,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 832700
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1103200
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 812500
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 828000
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 815100
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 601700
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 872300
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 835000
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9314538461538461,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 986400
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 931600
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 990900
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 805000
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 849600
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 881400
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 869300
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1033700
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 927700
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 981800
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1001600
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1043100
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 806800
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9493230769230768,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 775200
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 795300
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 895500
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 920200
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1334300
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 811000
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1029700
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 791300
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1300200
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1084800
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1085700
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 890300
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 627700
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 1.0422615384615386,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 928800
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 888000
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 850600
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1186900
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 899200
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1581600
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 787200
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1103300
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1427900
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1046400
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 845500
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1054200
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 949800
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8899692307692307,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 908800
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1078300
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 973500
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 852500
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 955500
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 860500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 923300
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 906000
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 929700
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 899300
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 938600
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 803300
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 540300
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8578846153846154,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 882800
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 795600
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 800000
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 856200
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 970900
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1016500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 912200
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 790100
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 956400
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 842900
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 946000
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 847200
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 535700
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9423125,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 859000
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 948800
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 928000
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 928600
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 840800
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 642000
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 963600
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1427700
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.93215,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 828500
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 893700
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 943900
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 974400
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1224200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 549800
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1063500
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 979200
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9504625,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 970100
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 967700
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 942600
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 855600
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1102800
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 777500
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1069700
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 917700
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.980275,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 940900
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 884400
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 955600
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1410100
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 943200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 562100
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1026300
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1119600
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 8,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.90785,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1027600
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 871300
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 875300
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1242500
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 975500
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 543500
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 842400
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 884700
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9144769230769231,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 836000
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 942600
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 895500
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 933500
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 865900
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 841100
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1007900
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 865500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1123300
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1013100
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 896900
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 947600
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 719300
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9204384615384615,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 876100
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 980900
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1010400
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 949700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 923700
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1004500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 889000
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 935000
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 992700
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 921600
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 978400
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 936900
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 566800
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9158615384615385,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 912700
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 968000
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1081700
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 885000
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1008300
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 928700
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 901100
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 951600
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 943600
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 882700
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 908700
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 960100
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 574000
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9807230769230769,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1111200
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 995800
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 888800
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 920600
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1027000
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 946200
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 942900
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1171500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 969100
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1016700
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1136700
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1069100
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 553800
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / evidência conclusiva",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "violacao_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9695769230769231,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 868500
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 942900
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 983200
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1557600
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1174800
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 929700
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 864100
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 893500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 860800
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 841400
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1129100
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1028600
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 530300
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.881075,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 938600
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 894600
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 991100
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1179900
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 844800
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 538400
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 817200
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 844000
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.84295,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 800200
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 869600
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 771300
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 950700
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 989700
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 623000
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 870500
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 868600
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.7915375,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 784400
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 824600
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 924300
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 781200
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 847200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 566800
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 796000
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 807800
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.977525,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 901300
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 873900
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 918800
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 963300
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1606200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 702300
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 874900
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 979500
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9168375,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 861900
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 815500
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 813000
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1089100
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1082800
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 599800
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 969800
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1102800
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8998153846153846,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 833200
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 897000
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1061900
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 964600
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 830000
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1149000
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 823700
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 925300
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 850600
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 946100
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 892100
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 945400
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 578700
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9146,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 937400
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 952200
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 942500
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 805700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 861200
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 801500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 789000
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 966400
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 802400
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1513800
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 808200
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 929800
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 779700
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9267846153846154,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 806600
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 951600
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 902100
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 861700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 962300
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 959600
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 959300
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 894200
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1198500
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 842800
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 882400
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1055700
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 771400
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8470769230769232,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 792400
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 885000
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 870800
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 794700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 912800
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 857800
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 850100
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 781200
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 951000
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 799400
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 854200
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 979500
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 683100
+        }
+      ]
+    },
+    {
+      "configuracao": "Prioridade / incerteza",
+      "modo": {
+        "agenda_strategy": "prioridade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8272846153846154,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 813300
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 827300
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 963700
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 750300
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 770300
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 882700
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 769500
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 802500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 834300
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 955600
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 875600
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 832500
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 677100
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8947875,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1131000
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 790800
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 831600
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 897800
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 901200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 656000
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 1104900
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 845000
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 1.0110875,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1171300
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 791500
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1592200
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 829400
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1071200
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 598200
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 929000
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1105900
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8891875,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 999900
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 920100
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 950500
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 917000
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 948900
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 632600
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 884800
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 859700
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.954125,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 987600
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 968300
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1225400
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1026200
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1008400
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 737800
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 811000
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 868300
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "desenvolvimento",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 8,
+      "acertos": 7,
+      "percentual": 87.5,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9321125,
+      "erros": [
+        "T18"
+      ],
+      "casos": [
+        {
+          "case_id": "T01",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 847600
+        },
+        {
+          "case_id": "T02",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 909900
+        },
+        {
+          "case_id": "T05",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 994700
+        },
+        {
+          "case_id": "T09",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 931400
+        },
+        {
+          "case_id": "T11",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1342400
+        },
+        {
+          "case_id": "T12",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 555800
+        },
+        {
+          "case_id": "T18",
+          "esperado": "nao_conforme",
+          "obtido": "pendente",
+          "acerto": false,
+          "tempo_ns": 957800
+        },
+        {
+          "case_id": "T21",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 917300
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 5,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9392538461538461,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1165400
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 912000
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1025600
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 872700
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 861400
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 989500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 985700
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1080500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 861400
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 865000
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 928900
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 946900
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 715300
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 17,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.9948230769230769,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 925200
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 952400
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 951200
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1039100
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 859300
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 904900
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1159200
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 919100
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1144300
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1320600
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1009400
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1155200
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 592800
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 29,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 0.8672384615384615,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 845500
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 820600
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 887800
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 836400
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 915200
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 916100
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 850800
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 832500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 946000
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 906200
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 933700
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 856800
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 726500
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 43,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 1.0095307692307693,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 950300
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 925700
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 883800
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 887100
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 923100
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1012500
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 884200
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1418400
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1207800
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 820500
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1065000
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1102900
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 1042600
+        }
+      ]
+    },
+    {
+      "configuracao": "Especificidade / incerteza",
+      "modo": {
+        "agenda_strategy": "especificidade",
+        "aggregation": "incerteza_primeiro"
+      },
+      "conjunto": "avaliacao",
+      "semente": 67,
+      "versao": "1.1.0",
+      "total": 13,
+      "acertos": 13,
+      "percentual": 100.0,
+      "falsos_conformes": 0,
+      "tempo_ms_medio_por_caso": 1.040376923076923,
+      "erros": [],
+      "casos": [
+        {
+          "case_id": "T03",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1049700
+        },
+        {
+          "case_id": "T04",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 860300
+        },
+        {
+          "case_id": "T06",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1595400
+        },
+        {
+          "case_id": "T07",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 988200
+        },
+        {
+          "case_id": "T08",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 817600
+        },
+        {
+          "case_id": "T10",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 940000
+        },
+        {
+          "case_id": "T13",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 849500
+        },
+        {
+          "case_id": "T14",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1037500
+        },
+        {
+          "case_id": "T15",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 979000
+        },
+        {
+          "case_id": "T16",
+          "esperado": "conforme",
+          "obtido": "conforme",
+          "acerto": true,
+          "tempo_ns": 1546900
+        },
+        {
+          "case_id": "T17",
+          "esperado": "nao_conforme",
+          "obtido": "nao_conforme",
+          "acerto": true,
+          "tempo_ns": 1150700
+        },
+        {
+          "case_id": "T19",
+          "esperado": "pendente",
+          "obtido": "pendente",
+          "acerto": true,
+          "tempo_ns": 1045400
+        },
+        {
+          "case_id": "T20",
+          "esperado": "nao_aplicavel",
+          "obtido": "nao_aplicavel",
+          "acerto": true,
+          "tempo_ns": 664700
+        }
+      ]
+    }
+  ],
+  "traces_T01": {
+    "prioridade": [
+      "A01",
+      "A02",
+      "A03",
+      "A04",
+      "A05",
+      "A06",
+      "A07",
+      "A08",
+      "A09",
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10",
+      "C11",
+      "C12",
+      "R22",
+      "R23",
+      "R24"
+    ],
+    "especificidade": [
+      "C12",
+      "A09",
+      "A01",
+      "A02",
+      "A03",
+      "A04",
+      "A05",
+      "A06",
+      "A07",
+      "A08",
+      "R22",
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10",
+      "C11",
+      "R23",
+      "R24"
+    ]
+  }
+}

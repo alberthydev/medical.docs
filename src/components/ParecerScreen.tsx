@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileText, ArrowRight } from 'lucide-react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { MarkdownParecerView } from './MarkdownParecerView';
 
 interface ParecerScreenProps {
@@ -8,6 +10,9 @@ interface ParecerScreenProps {
   onCopyNotice: (msg: string) => void;
   onOpenShareModal: () => void;
   onNavigateToNovaAnalise?: () => void;
+  academicSource?: 'manual' | 'fake_demo' | 'human';
+  securityHash?: string;
+  onSaveEdit?: (value: string) => Promise<void>;
 }
 
 export const ParecerScreen: React.FC<ParecerScreenProps> = ({
@@ -15,8 +20,28 @@ export const ParecerScreen: React.FC<ParecerScreenProps> = ({
   onUpdateMarkdown,
   onCopyNotice,
   onOpenShareModal,
-  onNavigateToNovaAnalise
+  onNavigateToNovaAnalise,
+  academicSource,
+  securityHash,
+  onSaveEdit,
 }) => {
+  const [draft, setDraft] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  async function save() {
+    if (!onSaveEdit || draft === null) return;
+    setSaving(true);
+    setError('');
+    try {
+      await onSaveEdit(draft);
+      setDraft(null);
+    } catch (caught) {
+      setError((caught as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  }
   if (!markdownContent || markdownContent.trim().length === 0) {
     return (
       <div className="w-full max-w-xl mx-auto px-4 py-20 text-center animate-in fade-in duration-200">
@@ -45,6 +70,41 @@ export const ParecerScreen: React.FC<ParecerScreenProps> = ({
           )}
         </div>
       </div>
+    );
+  }
+
+  if (academicSource) {
+    const origin = academicSource === 'human' ? 'Edição humana' : academicSource === 'manual' ? 'Extração manual' : 'Demonstração simulada';
+    const button = 'rounded-lg border border-[#d0cdc7] px-3 py-2 text-sm font-semibold disabled:opacity-60';
+    return (
+      <article className="max-w-4xl mx-auto p-6 my-6 rounded-2xl border border-[#e5e2dd] bg-white text-[#0f2137] space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-semibold">{origin}</p>
+          <div className="flex gap-2 print:hidden">
+            {onSaveEdit && draft === null && (
+              <button type="button" className={button} onClick={() => setDraft(markdownContent)}>Editar texto</button>
+            )}
+            <button type="button" className={button} onClick={onOpenShareModal}>Compartilhar</button>
+          </div>
+        </div>
+        {draft === null ? (
+          <div className="space-y-3 [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:font-semibold [&_ul]:pl-6 [&_ul]:list-disc [&_a]:underline [&_a]:break-words">
+            <Markdown skipHtml disallowedElements={['img']} remarkPlugins={[remarkGfm]}>{markdownContent}</Markdown>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <label className="grid gap-2 text-sm font-semibold">Texto editado
+              <textarea value={draft} onChange={e => setDraft(e.target.value)} disabled={saving} rows={15} className="rounded-lg border p-3 font-mono font-normal" />
+            </label>
+            <div className="flex gap-2">
+              <button type="button" className={button} disabled={saving || !draft.trim()} onClick={save}>Salvar edição</button>
+              <button type="button" className={button} disabled={saving} onClick={() => { setDraft(null); setError(''); }}>Descartar edição</button>
+            </div>
+            {error && <p role="alert" className="text-sm text-[#8d2a13]">{error}</p>}
+          </div>
+        )}
+        {securityHash && <p className="break-all border-t pt-3 text-xs text-[#5d6066]">Resumo de integridade {securityHash}</p>}
+      </article>
     );
   }
 

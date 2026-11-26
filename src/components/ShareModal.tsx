@@ -37,12 +37,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const fakeLink = `${window.location.origin}${window.location.pathname}#parecer=${patient.protocolNumber.toLowerCase()}`;
     navigator.clipboard.writeText(fakeLink);
     setCopiedLink(true);
-    onShowNotice('Link seguro do parecer copiado! (Acesso protegido por autenticação)');
+    onShowNotice('Atalho do parecer copiado. Ele abre no navegador que contém o histórico da conta.');
     setTimeout(() => setCopiedLink(false), 2200);
   };
 
   const handleShareChannel = (channel: string) => {
-    onShowNotice(`Compartilhando parecer técnico via ${channel}...`);
+    onShowNotice(`Envio por ${channel} indisponível neste protótipo.`);
     setTimeout(() => {
       onClose();
     }, 1200);

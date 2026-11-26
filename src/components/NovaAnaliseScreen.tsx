@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import {
   Upload,
   FileText,
-  Sparkles,
-  ArrowRight,
   BookOpen,
   Check,
   AlertCircle,
@@ -22,6 +20,7 @@ import {
   FileSearch
 } from 'lucide-react';
 import { AppUser, PatientAnalysis } from '../types';
+import { AcademicResult, ManualAnalysisPanel } from './ManualAnalysisPanel';
 import {
   parseStandardFileName,
   PcdtScrapedResult,
@@ -33,8 +32,7 @@ interface NovaAnaliseScreenProps {
   onShowNotice: (msg: string) => void;
   currentUser: AppUser;
   onDraftStateChange?: (hasDraft: boolean) => void;
-  activePrompt?: string;
-  onOpenPromptEditor?: () => void;
+  visible: boolean;
 }
 
 interface UploadedFile {
@@ -46,23 +44,12 @@ interface UploadedFile {
   parsedInfo?: ParsedFileInfo;
 }
 
-interface ScrapedSummaryFile {
-  name: string;
-  data: string;
-}
-
-interface ApiFile {
-  name: string;
-  data: string;
-}
-
 export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
   onStartAnalysis,
   onShowNotice,
   currentUser,
   onDraftStateChange,
-  activePrompt,
-  onOpenPromptEditor
+  visible
 }) => {
   // 1. Patient Files & Parsed Metadata State (SECTION 1 - TOP)
   const [patientFiles, setPatientFiles] = useState<UploadedFile[]>([]);
@@ -90,26 +77,11 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     message: string;
   } | null>(null);
 
-  // Loading & Execution State
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisStepText, setAnalysisStepText] = useState('');
-
   const patientFileInputRef = useRef<HTMLInputElement>(null);
   const manualPcdtInputRef = useRef<HTMLInputElement>(null);
   const pcdtScrapeRequestRef = useRef(0);
 
-  const fileToDataUrl = (file: File): Promise<string> => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result);
-      } else {
-        reject(new Error(`Não foi possível ler o arquivo "${file.name}".`));
-      }
-    };
-    reader.onerror = () => reject(reader.error || new Error(`Não foi possível ler o arquivo "${file.name}".`));
-    reader.readAsDataURL(file);
-  });
+
 
   // Trigger automated web scraping when metadata CID/Pathology changes
   const performPcdtAutoScraping = async (cid: string, pathology: string, filename: string) => {
@@ -134,10 +106,10 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
       const scrapeResponse = await fetch('/api/pcdt/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cid, pathology, filename })
+        body: JSON.stringify({ cid, pathology })
       });
       const scrapedResult = scrapeResponse.ok
-        ? await scrapeResponse.json() as PcdtScrapedResult & { summaryFile?: ScrapedSummaryFile }
+        ? await scrapeResponse.json() as PcdtScrapedResult
         : null;
       const result = scrapedResult;
 
@@ -294,120 +266,44 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
     }
   };
 
-  const handleExecuteAnalysis = async () => {
-    if (patientFiles.length === 0 && !patientDossierNotes.trim()) {
-      onShowNotice('Por favor, anexe os documentos do paciente para análise.');
-      return;
-    }
-
-    const pcdtContentToUse = scrapedPcdt
-      ? scrapedPcdt.criteriosResumo
-      : `DIRETRIZ CLÍNICA PARA ${extractedMetadata.pathology.toUpperCase() || 'PATOLOGIA DO PROCESSO'} (CID ${extractedMetadata.cid || 'NÃO ESPECIFICADO'}):\nUtilize as diretrizes clínicas e critérios de inclusão/escalonamento vigentes do SUS para a patologia informada.`;
-
-    const pcdtFileNameToUse = manualPcdtFile
-      ? manualPcdtFile.name
-      : (scrapedPcdt ? `${scrapedPcdt.pcdtName}.pdf` : `PCDT_${extractedMetadata.cid || 'Diretriz'}_Diretriz.pdf`);
-
-    setIsAnalyzing(true);
-    setAnalysisStepText('Processando dossiê e diretrizes normativas...');
-
-    setTimeout(() => {
-      setAnalysisStepText('Auditando critérios clínicos, escalonamento prévio e exames...');
-    }, 900);
-
-    setTimeout(() => {
-      setAnalysisStepText('Conferindo validades administrativas (90 dias) e 2ª conferência...');
-    }, 1800);
-
-    try {
-      const filesToSend = [
-        ...patientFiles,
-        ...(manualPcdtFile ? [manualPcdtFile] : [])
-      ];
-      const apiFiles: ApiFile[] = await Promise.all(
-        filesToSend.map(async ({ name, file }) => ({
-          name,
-          data: await fileToDataUrl(file)
-        }))
-      );
-      const scrapedSummaryFile = scrapedPcdt && 'summaryFile' in scrapedPcdt
-        ? (scrapedPcdt as PcdtScrapedResult & { summaryFile?: ScrapedSummaryFile }).summaryFile
-        : undefined;
-      if (scrapedSummaryFile) apiFiles.push(scrapedSummaryFile);
-
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pcdtText: pcdtContentToUse,
-          pcdtFileName: pcdtFileNameToUse,
-          patientDossierText: patientDossierNotes,
-          patientFileNames: patientFiles.map(f => f.name),
-          files: apiFiles,
-          systemPrompt: activePrompt
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null) as { error?: string } | null;
-        throw new Error(errorData?.error || `Erro na API (${response.status})`);
-      }
-
-      const data = await response.json();
-      const markdown = data.markdown || '';
-
-      const generatedProtocolNumber = data.protocolNumber;
-      const now = new Date();
-      const formattedDate = now.toLocaleDateString('pt-BR');
-      const formattedTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-      const isApproved = markdown.toUpperCase().includes('DEFERIMENTO') && !markdown.toUpperCase().includes('INDEFERIMENTO') && !markdown.toUpperCase().includes('PENDÊNCIA');
-      const isRejected = markdown.toUpperCase().includes('INDEFERIMENTO');
-      const calculatedStatus: 'approved' | 'rejected' | 'pending' = isApproved ? 'approved' : isRejected ? 'rejected' : 'pending';
-
-      const newPatientData: PatientAnalysis = {
-        id: `proc-${Date.now()}`,
-        protocolNumber: generatedProtocolNumber,
-        patientName: extractedMetadata.patientName || 'Não identificado',
-        cpfMasked: 'Não informado',
-        susState: 'Não informado',
-        cid10: extractedMetadata.cid || 'Não informado',
-        diseaseName: extractedMetadata.pathology || (scrapedPcdt?.pcdtName || 'Não informado'),
-        requestedDrug: scrapedPcdt?.principaisMedicamentos?.[0] || 'Não informado',
-        dosage: 'Não informado',
-        prescriberName: 'Não informado',
-        prescriberCrm: 'Não informado',
-        protocolDate: formattedDate,
-        evaluationDate: `${formattedDate} às ${formattedTime}`,
-        status: calculatedStatus,
-        statusLabel: calculatedStatus === 'approved' ? 'Processo Conforme (Aprovado)' : calculatedStatus === 'rejected' ? 'Não Conforme (Indeferido)' : 'Processo com Pendência',
-        statusBadgeColor: '',
-        verdictSummary: 'Consultar o parecer Markdown gerado pela análise.',
-        clinicalMeritSummary: 'Consultar o parecer Markdown gerado pela análise.',
-        administrativeIssues: [],
-        clinicalMetrics: [],
-        complianceMatrix: [],
-        officialDispatchText: 'Consultar o parecer Markdown gerado pela análise.',
-        auditorName: currentUser.name,
-        auditorCrf: currentUser.crf,
-        securityHash: data.securityHash,
-        generatedDateFull: `${formattedDate} às ${formattedTime} (Horário de Brasília)`,
-        markdown: markdown
-      };
-
-      if (data.source === 'gemini-api') {
-        onShowNotice(`Auditoria concluída com sucesso via Gemini (${data.model || 'modelo configurado'})!`);
-      } else {
-        onShowNotice('Auditoria clínica gerada com base nas diretrizes do processo!');
-      }
-
-      setIsAnalyzing(false);
-      onStartAnalysis(markdown, newPatientData);
-    } catch (err: any) {
-      console.warn('Erro ao chamar API de análise:', err);
-      setIsAnalyzing(false);
-      onShowNotice(err?.message || 'Erro ao processar a auditoria. Verifique a conexão com o servidor.');
-    }
+  const handleAcademicResult = (data: AcademicResult) => {
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const formattedTime = now.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
+    const status = data.auditStatus === 'conforme' ? 'approved' : data.auditStatus === 'nao_conforme' ? 'rejected' : 'pending';
+    const summary = 'Conferência documental de processo sintético.';
+    const patient: PatientAnalysis = {
+      id: data.protocolNumber,
+      protocolNumber: data.protocolNumber,
+      patientName: 'Processo sintético',
+      cpfMasked: 'Não se aplica',
+      susState: 'SC',
+      cid10: 'Ver evidências',
+      diseaseName: 'Asma',
+      requestedDrug: 'Omalizumabe',
+      dosage: 'Ver evidências',
+      prescriberName: 'Não se aplica',
+      prescriberCrm: 'Não se aplica',
+      protocolDate: data.referenceDate,
+      evaluationDate: formattedDate + ' às ' + formattedTime,
+      status,
+      statusLabel: data.statusLabel,
+      statusBadgeColor: '',
+      verdictSummary: summary,
+      clinicalMeritSummary: summary,
+      administrativeIssues: [],
+      clinicalMetrics: [],
+      complianceMatrix: [],
+      officialDispatchText: summary,
+      auditorName: currentUser.name,
+      auditorCrf: currentUser.crf,
+      securityHash: data.securityHash,
+      generatedDateFull: formattedDate + ' às ' + formattedTime + ' (Horário de Brasília)',
+      markdown: data.markdown,
+      auditSource: data.source,
+    };
+    onDraftStateChange?.(false);
+    onStartAnalysis(data.markdown, patient);
   };
 
   return (
@@ -419,26 +315,9 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
         </h1>
 
         <p className="text-xs sm:text-sm text-[#74777d] leading-relaxed">
-          Faça o upload dos documentos do paciente. O sistema reconhece o padrão <code className="bg-[#f6f3ee] text-[#0f2137] px-1.5 py-0.5 rounded font-mono font-semibold text-[11px] border border-[#e5e2dd]">CID10-Patologia-Nome</code>, busca no portal CONITEC/Ministério da Saúde e gera o parecer técnico.
+          Anexe documentos inteiramente fictícios. O sistema reconhece o padrão <code className="bg-[#f6f3ee] text-[#0f2137] px-1.5 py-0.5 rounded font-mono font-semibold text-[11px] border border-[#e5e2dd]">CID10-Patologia-Nome</code>, busca no portal CONITEC/Ministério da Saúde e mostra o protocolo encontrado para consulta.
         </p>
 
-        {/* Active Prompt Info */}
-        {activePrompt && onOpenPromptEditor && (
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-[#e5e2dd] text-xs shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-[#33694b]" />
-            <span className="text-[#5d6066]">
-              Prompt de Auditoria: <strong>{activePrompt.length.toLocaleString()} caracteres</strong>
-            </span>
-            <span className="text-[#d0cdc7]">|</span>
-            <button
-              onClick={onOpenPromptEditor}
-              className="text-[#0f2137] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              <Sparkles className="w-3 h-3 text-[#0f2137]" />
-              <span>Editar Prompt</span>
-            </button>
-          </div>
-        )}
       </section>
 
       {/* Main Flow Form */}
@@ -757,30 +636,13 @@ export const NovaAnaliseScreen: React.FC<NovaAnaliseScreenProps> = ({
           )}
         </section>
 
-        {/* =========================================================================
-            SUBMIT / EXECUTE AUDIT BUTTON
-        ========================================================================= */}
-        <section className="pt-3 flex items-center justify-end">
-          <button
-            type="button"
-            onClick={handleExecuteAnalysis}
-            disabled={isAnalyzing || isScrapingPcdt}
-            className="w-full sm:w-auto h-12 px-8 rounded-xl bg-[#0f2137] hover:bg-[#1a3353] active:scale-[0.99] text-white font-semibold text-sm transition-all shadow-[0_4px_16px_rgba(15,33,55,0.2)] flex items-center justify-center gap-3 disabled:opacity-80 cursor-pointer"
-          >
-            {isAnalyzing ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin text-[#b5f0ca]" />
-                <span className="text-xs font-medium text-[#d4e3ff]">{analysisStepText}</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4 text-[#b5f0ca]" />
-                <span>Avaliar Processo</span>
-                <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </button>
-        </section>
+        <ManualAnalysisPanel
+          key={currentUser.id}
+          userId={currentUser.id}
+          visible={visible}
+          primaryFiles={patientFiles.map(entry => entry.file)}
+          onResult={handleAcademicResult}
+        />
 
       </div>
     </div>

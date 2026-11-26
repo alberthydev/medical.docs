@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScreenId, PatientAnalysis, AppUser, UserSettings, SharedParecerDetails } from './types';
 import { getMarkdownForPatient } from './utils/patientAnalysis';
 import { 
@@ -24,6 +24,26 @@ import { Toast } from './components/Toast';
 import { AvatarId } from './components/Avatar';
 
 const STORAGE_HISTORY_KEY = 'medauditor_patients_history_v1';
+const historyKey = (userId: string) => STORAGE_HISTORY_KEY + ':' + userId;
+
+function loadHistory(userId: string): PatientAnalysis[] {
+  try {
+    const scoped = localStorage.getItem(historyKey(userId));
+    const content = scoped ?? (userId === 'admin' ? localStorage.getItem(STORAGE_HISTORY_KEY) : null);
+    const data = content ? JSON.parse(content) : [];
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(userId: string, history: PatientAnalysis[]) {
+  try {
+    localStorage.setItem(historyKey(userId), JSON.stringify(history));
+  } catch {
+    // Continue na sessão atual quando o navegador bloquear a persistência.
+  }
+}
 
 export function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('login');
@@ -33,18 +53,12 @@ export function App() {
   const [isPromptEditorOpen, setIsPromptEditorOpen] = useState(false);
 
   const [activePatient, setActivePatient] = useState<PatientAnalysis | null>(null);
+  const viewingId = useRef<string | undefined>(activePatient?.id);
+  viewingId.current = activePatient?.id;
+  const accountId = useRef(currentUser.id);
+  accountId.current = currentUser.id;
   const [currentMarkdown, setCurrentMarkdown] = useState<string>('');
-  const [allPatients, setAllPatients] = useState<PatientAnalysis[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_HISTORY_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (e) {
-      console.error('Error loading patient history from localStorage:', e);
-    }
-    return [];
-  });
+  const [allPatients, setAllPatients] = useState<PatientAnalysis[]>([]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [shareModalPatient, setShareModalPatient] = useState<PatientAnalysis | null>(null);
   const [sharedParecerData, setSharedParecerData] = useState<SharedParecerDetails | null>(null);
@@ -84,8 +98,10 @@ export function App() {
   useEffect(() => {
     const handleHashCheck = () => {
       const hash = window.location.hash;
-      if (hash.startsWith('#parecer=')) {
-        const protocol = decodeURIComponent(hash.replace('#parecer=', '')).toUpperCase();
+      if (isLoggedIn && hash.startsWith('#parecer=')) {
+        let protocol: string;
+        try { protocol = decodeURIComponent(hash.slice('#parecer='.length)).toUpperCase(); }
+        catch { return; }
         const found = allPatients.find(p => p.protocolNumber.toUpperCase() === protocol || p.id === protocol);
         if (found) {
           const targetMarkdown = found.markdown || getMarkdownForPatient(found);
@@ -97,7 +113,7 @@ export function App() {
     handleHashCheck();
     window.addEventListener('hashchange', handleHashCheck);
     return () => window.removeEventListener('hashchange', handleHashCheck);
-  }, [allPatients, currentUser, avatarId]);
+  }, [allPatients, currentUser, avatarId, isLoggedIn]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -112,6 +128,11 @@ export function App() {
   const handleSwitchUser = (newUser: AppUser) => {
     persistCurrentUser(newUser);
     setCurrentUser(newUser);
+    setAllPatients(loadHistory(newUser.id));
+    setActivePatient(null);
+    setShareModalPatient(null);
+    setSharedParecerData(null);
+    setCurrentMarkdown('');
     const loadedSettings = getUserSettings(newUser.id);
     setUserSettings(loadedSettings);
     setAvatarId(newUser.avatarId as AvatarId);
@@ -147,16 +168,32 @@ export function App() {
       setAllPatients(prev => {
         const filtered = prev.filter(p => p.id !== patientData.id && p.protocolNumber !== patientData.protocolNumber);
         const updated = [patientData, ...filtered];
-        try {
-          localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(updated));
-        } catch (e) {
-          console.error('Error saving patient history to localStorage:', e);
-        }
+        saveHistory(currentUser.id, updated);
         return updated;
       });
     }
     setCurrentScreen('parecer');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const saveAcademicEdit = async (markdown: string) => {
+    if (!activePatient?.auditSource) return;
+    const editing = activePatient;
+    const response = await fetch('/api/analyze/digest', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ markdown }),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Não foi possível salvar a edição.');
+    if (accountId.current !== currentUser.id) return;
+    const updated: PatientAnalysis = { ...editing, ...result, auditSource: 'human' };
+    setActivePatient(previous => previous?.id === editing.id ? updated : previous);
+    if (viewingId.current === editing.id) setCurrentMarkdown(result.markdown);
+    setAllPatients(previous => {
+      if (!previous.some(item => item.id === editing.id)) return previous;
+      const items = previous.map(item => item.id === editing.id ? updated : item);
+      saveHistory(currentUser.id, items);
+      return items;
+    });
   };
 
   // Open Shared View (includes author, date/time with day and exact hour)
@@ -268,14 +305,17 @@ export function App() {
               onStartAnalysis={handleStartAnalysis}
               onShowNotice={showToast}
               currentUser={currentUser}
-              activePrompt={userSettings.activePrompt}
-              onOpenPromptEditor={() => setIsPromptEditorOpen(true)}
+              visible={currentScreen === 'nova-analise'}
               onDraftStateChange={setHasNovaAnaliseDraft}
             />
           </div>
 
           {currentScreen === 'parecer' && (
-            <ParecerScreen 
+            <ParecerScreen
+              key={activePatient?.id}
+              academicSource={activePatient?.auditSource}
+              securityHash={activePatient?.securityHash}
+              onSaveEdit={saveAcademicEdit}
               markdownContent={currentMarkdown}
               onUpdateMarkdown={setCurrentMarkdown}
               onCopyNotice={showToast}
@@ -287,7 +327,18 @@ export function App() {
             />
           )}
 
-          {currentScreen === 'parecer-compartilhado' && activePatient && (
+          {currentScreen === 'parecer-compartilhado' && activePatient?.auditSource && (
+            <ParecerScreen
+              academicSource={activePatient.auditSource}
+              securityHash={activePatient.securityHash}
+              markdownContent={sharedParecerData?.markdown || currentMarkdown}
+              onUpdateMarkdown={setCurrentMarkdown}
+              onCopyNotice={showToast}
+              onOpenShareModal={() => setShareModalPatient(activePatient)}
+            />
+          )}
+
+          {currentScreen === 'parecer-compartilhado' && activePatient && !activePatient.auditSource && (
             <ParecerCompartilhadoScreen 
               sharedData={sharedParecerData || {
                 id: `shared-${activePatient.protocolNumber || 'PROCESSO'}`,

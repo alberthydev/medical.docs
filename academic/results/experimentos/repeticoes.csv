@@ -1,0 +1,51 @@
+configuracao,conjunto,semente,versao,total,acertos,percentual,falsos_conformes,tempo_ms_medio_por_caso,erros
+Checklist fixo,desenvolvimento,5,1.0.0,8,8,100.0,0,0.0332375,
+Checklist fixo,desenvolvimento,17,1.0.0,8,8,100.0,0,0.024875,
+Checklist fixo,desenvolvimento,29,1.0.0,8,8,100.0,0,0.0232625,
+Checklist fixo,desenvolvimento,43,1.0.0,8,8,100.0,0,0.0387125,
+Checklist fixo,desenvolvimento,67,1.0.0,8,8,100.0,0,0.0225625,
+Checklist fixo,avaliacao,5,1.0.0,13,13,100.0,0,0.02754615384615385,
+Checklist fixo,avaliacao,17,1.0.0,13,13,100.0,0,0.0261,
+Checklist fixo,avaliacao,29,1.0.0,13,13,100.0,0,0.02288461538461538,
+Checklist fixo,avaliacao,43,1.0.0,13,13,100.0,0,0.022584615384615384,
+Checklist fixo,avaliacao,67,1.0.0,13,13,100.0,0,0.02396153846153846,
+Prioridade / evidência conclusiva,desenvolvimento,5,1.1.0,8,8,100.0,0,0.966175,
+Prioridade / evidência conclusiva,desenvolvimento,17,1.1.0,8,8,100.0,0,0.9357625,
+Prioridade / evidência conclusiva,desenvolvimento,29,1.1.0,8,8,100.0,0,0.8729125,
+Prioridade / evidência conclusiva,desenvolvimento,43,1.1.0,8,8,100.0,0,0.890825,
+Prioridade / evidência conclusiva,desenvolvimento,67,1.1.0,8,8,100.0,0,0.8375625,
+Prioridade / evidência conclusiva,avaliacao,5,1.1.0,13,13,100.0,0,0.9314538461538461,
+Prioridade / evidência conclusiva,avaliacao,17,1.1.0,13,13,100.0,0,0.9493230769230768,
+Prioridade / evidência conclusiva,avaliacao,29,1.1.0,13,13,100.0,0,1.0422615384615386,
+Prioridade / evidência conclusiva,avaliacao,43,1.1.0,13,13,100.0,0,0.8899692307692307,
+Prioridade / evidência conclusiva,avaliacao,67,1.1.0,13,13,100.0,0,0.8578846153846154,
+Especificidade / evidência conclusiva,desenvolvimento,5,1.1.0,8,8,100.0,0,0.9423125,
+Especificidade / evidência conclusiva,desenvolvimento,17,1.1.0,8,8,100.0,0,0.93215,
+Especificidade / evidência conclusiva,desenvolvimento,29,1.1.0,8,8,100.0,0,0.9504625,
+Especificidade / evidência conclusiva,desenvolvimento,43,1.1.0,8,8,100.0,0,0.980275,
+Especificidade / evidência conclusiva,desenvolvimento,67,1.1.0,8,8,100.0,0,0.90785,
+Especificidade / evidência conclusiva,avaliacao,5,1.1.0,13,13,100.0,0,0.9144769230769231,
+Especificidade / evidência conclusiva,avaliacao,17,1.1.0,13,13,100.0,0,0.9204384615384615,
+Especificidade / evidência conclusiva,avaliacao,29,1.1.0,13,13,100.0,0,0.9158615384615385,
+Especificidade / evidência conclusiva,avaliacao,43,1.1.0,13,13,100.0,0,0.9807230769230769,
+Especificidade / evidência conclusiva,avaliacao,67,1.1.0,13,13,100.0,0,0.9695769230769231,
+Prioridade / incerteza,desenvolvimento,5,1.1.0,8,7,87.5,0,0.881075,T18
+Prioridade / incerteza,desenvolvimento,17,1.1.0,8,7,87.5,0,0.84295,T18
+Prioridade / incerteza,desenvolvimento,29,1.1.0,8,7,87.5,0,0.7915375,T18
+Prioridade / incerteza,desenvolvimento,43,1.1.0,8,7,87.5,0,0.977525,T18
+Prioridade / incerteza,desenvolvimento,67,1.1.0,8,7,87.5,0,0.9168375,T18
+Prioridade / incerteza,avaliacao,5,1.1.0,13,13,100.0,0,0.8998153846153846,
+Prioridade / incerteza,avaliacao,17,1.1.0,13,13,100.0,0,0.9146,
+Prioridade / incerteza,avaliacao,29,1.1.0,13,13,100.0,0,0.9267846153846154,
+Prioridade / incerteza,avaliacao,43,1.1.0,13,13,100.0,0,0.8470769230769232,
+Prioridade / incerteza,avaliacao,67,1.1.0,13,13,100.0,0,0.8272846153846154,
+Especificidade / incerteza,desenvolvimento,5,1.1.0,8,7,87.5,0,0.8947875,T18
+Especificidade / incerteza,desenvolvimento,17,1.1.0,8,7,87.5,0,1.0110875,T18
+Especificidade / incerteza,desenvolvimento,29,1.1.0,8,7,87.5,0,0.8891875,T18
+Especificidade / incerteza,desenvolvimento,43,1.1.0,8,7,87.5,0,0.954125,T18
+Especificidade / incerteza,desenvolvimento,67,1.1.0,8,7,87.5,0,0.9321125,T18
+Especificidade / incerteza,avaliacao,5,1.1.0,13,13,100.0,0,0.9392538461538461,
+Especificidade / incerteza,avaliacao,17,1.1.0,13,13,100.0,0,0.9948230769230769,
+Especificidade / incerteza,avaliacao,29,1.1.0,13,13,100.0,0,0.8672384615384615,
+Especificidade / incerteza,avaliacao,43,1.1.0,13,13,100.0,0,1.0095307692307693,
+Especificidade / incerteza,avaliacao,67,1.1.0,13,13,100.0,0,1.040376923076923,

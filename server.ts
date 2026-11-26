@@ -2,13 +2,11 @@ import express from "express";
 import path from "path";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI, type Part } from "@google/genai";
 import dotenv from "dotenv";
-import { FULL_SYSTEM_PROMPT } from "./src/data/fullSystemPrompt";
+import { createAnalysisRouter, gatewayConfigured, isSameOrigin } from "./server/analysis";
 
 dotenv.config();
 
-let geminiClient: GoogleGenAI | null = null;
 const sessions = new Map<string, { user: AdminUser; expiresAt: number }>();
 
 interface AdminUser {
@@ -118,7 +116,7 @@ const adminUser: AdminUser = {
 function createSession(res: express.Response, user: AdminUser) {
   const token = crypto.randomBytes(32).toString("hex");
   sessions.set(token, { user, expiresAt: Date.now() + 8 * 60 * 60 * 1000 });
-  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  const secure = process.env.COOKIE_SECURE === "false" ? "" : process.env.NODE_ENV === "production" ? "; Secure" : "";
   res.setHeader("Set-Cookie", `medicaldocs_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800${secure}`);
 }
 
@@ -132,21 +130,13 @@ function getSessionUser(req: express.Request): AdminUser | null {
   return session.user;
 }
 
-function getGeminiClient(): GoogleGenAI | null {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key || key.trim().length === 0) {
-    return null;
-  }
-  if (!geminiClient) {
-    geminiClient = new GoogleGenAI({ apiKey: key.trim() });
-  }
-  return geminiClient;
-}
-
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT || 3000);
+  const HOST = process.env.HOST || "127.0.0.1";
 
+  app.use("/api/analyze", express.json({ limit: "12mb" }));
+  app.use("/api/analyze", createAnalysisRouter(req => getSessionUser(req)?.id));
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
@@ -156,10 +146,14 @@ async function startServer() {
   });
 
   app.post("/api/auth/login", (req, res) => {
+    if (!isSameOrigin(req)) return res.status(403).json({ error: "Origem da solicitação inválida." });
     const username = typeof req.body?.username === "string" ? req.body.username.trim() : "";
     const password = typeof req.body?.password === "string" ? req.body.password : "";
-    const expectedUsername = process.env.ADMIN_USERNAME || "admin";
-    const expectedPassword = process.env.ADMIN_PASSWORD || "teste123";
+    const expectedUsername = process.env.ADMIN_USERNAME;
+    const expectedPassword = process.env.ADMIN_PASSWORD;
+    if (!expectedUsername || !expectedPassword || expectedPassword === "teste123") {
+      return res.status(503).json({ error: "Login administrativo sem credenciais configuradas." });
+    }
     if (username !== expectedUsername || password !== expectedPassword) {
       return res.status(401).json({ error: "Usuário ou senha inválidos." });
     }
@@ -168,6 +162,7 @@ async function startServer() {
   });
 
   app.post("/api/auth/logout", (req, res) => {
+    if (!isSameOrigin(req)) return res.status(403).json({ error: "Origem da solicitação inválida." });
     const token = req.headers.cookie?.match(/(?:^|;\s*)medicaldocs_session=([^;]+)/)?.[1];
     if (token) sessions.delete(token);
     res.setHeader("Set-Cookie", "medicaldocs_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0");
@@ -177,11 +172,11 @@ async function startServer() {
   app.get("/api/auth/govbr", (req, res) => {
     const clientId = process.env.GOVBR_CLIENT_ID;
     const redirectUri = process.env.GOVBR_REDIRECT_URI;
-    if (!clientId || !redirectUri) {
+    if (!clientId || !redirectUri || !process.env.GOVBR_ALLOWED_SUBJECTS) {
       return res.status(503).json({ error: "Integração gov.br ainda não configurada no servidor." });
     }
     const state = crypto.randomBytes(24).toString("hex");
-    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    const secure = process.env.COOKIE_SECURE === "false" ? "" : process.env.NODE_ENV === "production" ? "; Secure" : "";
     res.setHeader("Set-Cookie", `govbr_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Max-Age=600${secure}`);
     const params = new URLSearchParams({
       response_type: "code",
@@ -201,7 +196,7 @@ async function startServer() {
     const clientId = process.env.GOVBR_CLIENT_ID;
     const clientSecret = process.env.GOVBR_CLIENT_SECRET;
     const redirectUri = process.env.GOVBR_REDIRECT_URI;
-    if (!clientId || !clientSecret || !redirectUri) {
+    if (!clientId || !clientSecret || !redirectUri || !process.env.GOVBR_ALLOWED_SUBJECTS) {
       return res.status(503).send("Integração gov.br não configurada.");
     }
     try {
@@ -224,26 +219,23 @@ async function startServer() {
       });
       if (!profileResponse.ok) throw new Error("Não foi possível obter o perfil gov.br.");
       const profile = await profileResponse.json() as { sub?: string; name?: string; email?: string };
+      const allowed = process.env.GOVBR_ALLOWED_SUBJECTS.split(",").map(value => value.trim());
+      if (!profile.sub || !allowed.includes(profile.sub)) return res.status(403).send("Conta sem autorização para este protótipo.");
       createSession(res, {
         ...adminUser,
-        id: `govbr:${profile.sub || "user"}`,
+        role: "Auditor",
+        id: `govbr:${profile.sub}`,
         name: profile.name || adminUser.name,
         email: profile.email || adminUser.email
       });
       return res.redirect("/");
-    } catch (error) {
-      console.error("Erro no callback gov.br:", error);
+    } catch {
       return res.status(502).send("Não foi possível concluir o login gov.br.");
     }
   });
 
-  // Health check API
-  app.get("/api/health", (req, res) => {
-    const hasKey = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0);
-    res.json({
-      status: "ok",
-      hasGeminiKey: hasKey
-    });
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", gatewayConfigured: gatewayConfigured() });
   });
 
   // PCDT Scraper API route - searches and scrapes official PCDT by CID and pathology
@@ -262,109 +254,6 @@ async function startServer() {
     }
   });
 
-  // Analyze API route - receives PCDT and patient files/texts and calls Gemini
-  app.post("/api/analyze", async (req, res) => {
-    try {
-      if (!getSessionUser(req)) {
-        return res.status(401).json({ error: "Sessão expirada. Faça login novamente." });
-      }
-      const {
-        pcdtText,
-        patientDossierText,
-        pcdtFileName,
-        patientFileNames,
-        files,
-        customPromptAddition,
-        systemPrompt
-      } = req.body;
-
-      const client = getGeminiClient();
-
-      if (client) {
-        const userPrompt = `[ARQUIVO 1: PCDT E/OU RESUMO DA PATOLOGIA/PROTOCOLO APLICÁVEL]
-Nome do arquivo: ${pcdtFileName || 'PCDT_Diretriz.pdf'}
-Conteúdo do protocolo fornecido:
-${pcdtText || 'Utilize os critérios oficiais vigentes para a patologia e medicamento informados nos documentos do paciente.'}
-
-[ARQUIVO 2: DOCUMENTOS QUE COMPÕEM O PROCESSO DE SOLICITAÇÃO DO MEDICAMENTO DO PACIENTE]
-Arquivos anexados: ${Array.isArray(patientFileNames) ? patientFileNames.join(', ') : (patientFileNames || 'Dossiê_Paciente.pdf')}
-Conteúdo dos documentos do paciente (LME, Receita Médica, Exames, Relatórios, Termo, Comprovante de Residência):
-${patientDossierText || 'Documentos digitalizados do processo do paciente para conferência minuciosa.'}
-${customPromptAddition ? `\nInstruções adicionais: ${customPromptAddition}` : ''}`;
-
-        const uploadedFiles = Array.isArray(files) ? files : [];
-        const fileInputs: Part[] = uploadedFiles
-          .filter((file) =>
-            file &&
-            typeof file.name === "string" &&
-            typeof file.data === "string" &&
-            /^data:application\/pdf;base64,/i.test(file.data)
-          )
-          .map((file) => {
-            const match = file.data.match(/^data:([^;,]+);base64,(.+)$/s);
-            if (!match) {
-              throw new Error(`Arquivo PDF inválido: ${file.name}`);
-            }
-            return {
-              inlineData: {
-                mimeType: match[1],
-                data: match[2]
-              }
-            };
-          });
-
-        const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-        const response = await client.models.generateContent({
-          model,
-          config: {
-            systemInstruction: `${systemPrompt && systemPrompt.trim().length > 0 ? systemPrompt : FULL_SYSTEM_PROMPT}
-
-Responda exclusivamente em Markdown válido, sem cercar a resposta com blocos de código. Preserve os títulos, tabelas e listas exigidos pelo prompt.`,
-            temperature: 0.1
-          },
-          contents: [{
-            role: "user",
-            parts: [
-              { text: userPrompt },
-              ...fileInputs
-            ]
-          }]
-        });
-
-        const markdownResult = response.text || "";
-
-        return res.json({
-          markdown: markdownResult,
-          protocolNumber: `PROC-${new Date().getFullYear()}-${crypto.randomUUID()}`,
-          securityHash: `SHA-256:${crypto.createHash("sha256").update(markdownResult, "utf8").digest("hex")}`,
-          model,
-          source: "gemini-api",
-          filesSent: fileInputs.length
-        });
-      }
-
-      return res.status(503).json({
-        error: "GEMINI_API_KEY não configurada. Configure a chave no arquivo .env para executar a análise."
-      });
-
-    } catch (error: any) {
-      console.error("Erro na rota /api/analyze:", error);
-      const errorStatus = typeof error?.status === "number"
-        ? error.status
-        : typeof error?.code === "number"
-          ? error.code
-          : 500;
-      if (errorStatus === 429 || /quota|resource exhausted|rate limit|too many requests/i.test(String(error?.message || ""))) {
-        return res.status(503).json({
-          error: "Sem tokens disponíveis para realizar a análise. Contate o Administrador."
-        });
-      }
-      return res.status(500).json({
-        error: error.message || "Erro interno ao processar a auditoria com o Gemini."
-      });
-    }
-  });
-
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -380,8 +269,8 @@ Responda exclusivamente em Markdown válido, sem cercar a resposta com blocos de
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  app.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
   });
 }
 

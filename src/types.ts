@@ -76,6 +76,7 @@ export interface PatientAnalysis {
   securityHash?: string;
   generatedDateFull?: string;
   markdown?: string;
+  auditSource?: 'manual' | 'fake_demo' | 'human';
 }
 
 export interface ComplianceRow {

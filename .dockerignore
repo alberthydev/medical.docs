@@ -1,0 +1,16 @@
+.git
+.env
+.env.*
+node_modules
+**/node_modules
+dist
+**/__pycache__
+docs
+projeto
+fases
+medical-docs-skill
+academic/fixtures
+academic/results
+academic/tests
+ai-gateway/tests
+.gateway-state

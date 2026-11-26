@@ -243,3 +243,33 @@ fabric.properties
 !.idea/runConfigurations
 
 # End of https://www.toptal.com/developers/gitignore/api/node,react,webstorm+all
+
+### Medical Docs ###
+
+# Configuração local e credenciais
+.env.*
+!.env.example
+.envrc
+/medical-docs.demo.override.yaml
+/compose.override.yaml
+/compose.override.yml
+
+# Estado local e artefatos gerados
+.gateway-state/
+/resultados-locais/
+/output/
+/tmp/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Documentos locais e materiais da disciplina
+/projeto/
+/docs/entrega/
+/docs/fontes-asma/
+/docs/Diario_de_Bordo.docx
+*.pdf
+*.zip
+!/docs/demo/J45.0-Asma-Pessoa_Demonstracao_001.pdf
+!/docs/demo/Kit_Demonstracao_Medical_Docs.zip
